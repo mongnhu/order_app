@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/food/widgets/app_column.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
@@ -21,7 +22,7 @@ class PopularFoodDetail extends StatelessWidget {
     print("page is id " + pageId.toString());
     print("product name is " + product.name.toString());
     Get.find<PopularProductController>()
-        .initProduct(Get.find<CartController>());
+        .initProduct(product, Get.find<CartController>());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -58,7 +59,40 @@ class PopularFoodDetail extends StatelessWidget {
                       Get.to(() => MainFoodPage());
                     },
                     child: AppIcon(icon: Icons.arrow_back_ios_rounded)),
-                AppIcon(icon: Icons.shopping_cart),
+                GetBuilder<PopularProductController>(builder: (controller) {
+                  return Stack(
+                    children: [
+                      AppIcon(icon: Icons.shopping_cart),
+                      Get.find<PopularProductController>().totalItems >= 1
+                          ? Positioned(
+                              right: 3,
+                              top: 3,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() => CartPage());
+                                },
+                                child: AppIcon(
+                                  icon: Icons.circle,
+                                  iconColor: Colors.transparent,
+                                ),
+                              ))
+                          : Container(),
+                      Get.find<PopularProductController>().totalItems >= 1
+                          ? Positioned(
+                              right: 0,
+                              top: 0,
+                              child: BigText(
+                                text: Get.find<PopularProductController>()
+                                    .totalItems
+                                    .toString(),
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            )
+                          : Container()
+                    ],
+                  );
+                })
               ],
             ),
           ),
@@ -139,7 +173,7 @@ class PopularFoodDetail extends StatelessWidget {
                           )),
                       SizedBox(width: 10.w),
                       //BigText(popularProduct.quantity.toString(),style: TextStyle(fontSize: 34.sp)),
-                      BigText(text: popularProduct.quantity.toString()),
+                      BigText(text: popularProduct.inCartItems.toString()),
                       SizedBox(width: 10.w),
                       GestureDetector(
                           onTap: () {
@@ -152,21 +186,22 @@ class PopularFoodDetail extends StatelessWidget {
                     ],
                   ),
                 ),
-                Container(
+                GestureDetector(
+                  onTap: () {
+                    popularProduct.addItem(product);
+                  },
+                  child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10)),
-                    child: GestureDetector(
-                      onTap: () {
-                        popularProduct.addItem(product);
-                      },
-                      child: BigText(
-                        text: "\$${product.price!} Thêm vào giỏ hàng",
-                        color: Colors.white,
-                        size: 35.sp,
-                      ),
-                    )),
+                    child: BigText(
+                      text: "${product.price!}k Thêm vào giỏ hàng",
+                      color: Colors.white,
+                      size: 35.sp,
+                    ),
+                  ),
+                ),
               ],
             ),
           );

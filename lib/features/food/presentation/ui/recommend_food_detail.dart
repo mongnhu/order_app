@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
+import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
@@ -7,6 +9,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:readmore/readmore.dart';
 import 'package:get/get.dart';
+import 'package:food_delivery/controllers/cart_controller.dart';
 
 class RecommendedFoodDetail extends StatelessWidget {
   final int pageId;
@@ -16,6 +19,9 @@ class RecommendedFoodDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     var product =
         Get.find<RecommendedProductController>().recommendedProductList[pageId];
+    Get.find<PopularProductController>()
+        .initProduct(product, Get.find<CartController>());
+
     return Scaffold(
       body: CustomScrollView(
         slivers: [
@@ -31,7 +37,41 @@ class RecommendedFoodDetail extends StatelessWidget {
                   },
                   child: AppIcon(icon: Icons.close),
                 ),
-                AppIcon(icon: Icons.shopping_cart_outlined)
+                //AppIcon(icon: Icons.shopping_cart_outlined)
+                GetBuilder<PopularProductController>(builder: (controller) {
+                  return Stack(
+                    children: [
+                      AppIcon(icon: Icons.shopping_cart),
+                      Get.find<PopularProductController>().totalItems >= 1
+                          ? Positioned(
+                              right: 3,
+                              top: 3,
+                              child: GestureDetector(
+                                onTap: () {
+                                  Get.to(() => CartPage());
+                                },
+                                child: AppIcon(
+                                  icon: Icons.circle,
+                                  iconColor: Colors.transparent,
+                                ),
+                              ))
+                          : Container(),
+                      Get.find<PopularProductController>().totalItems >= 1
+                          ? Positioned(
+                              right: 0,
+                              top: 0,
+                              child: BigText(
+                                text: Get.find<PopularProductController>()
+                                    .totalItems
+                                    .toString(),
+                                color: Colors.black,
+                                size: 20,
+                              ),
+                            )
+                          : Container()
+                    ],
+                  );
+                })
               ],
             ),
             bottom: PreferredSize(
@@ -76,49 +116,69 @@ class RecommendedFoodDetail extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: [
-          Container(
-            padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const AppIcon(icon: Icons.remove),
-                SizedBox(width: 10.w),
-                BigText(text: "\$${product.price!} X 0"),
-                SizedBox(width: 10.w),
-                const AppIcon(icon: Icons.add),
-              ],
+      bottomNavigationBar:
+          GetBuilder<PopularProductController>(builder: (controller) {
+        return Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Container(
+              padding: EdgeInsets.only(top: 15.h, bottom: 15.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  GestureDetector(
+                    onTap: () {
+                      controller.setQuantity(false);
+                    },
+                    child: AppIcon(icon: Icons.remove),
+                  ),
+                  SizedBox(width: 10.w),
+                  BigText(
+                      text:
+                          "${product.price!}.000 X ${controller.inCartItems}"),
+                  SizedBox(width: 10.w),
+                  GestureDetector(
+                    onTap: () {
+                      controller.setQuantity(true);
+                    },
+                    child: AppIcon(icon: Icons.add),
+                  )
+                ],
+              ),
             ),
-          ),
-          Container(
-            margin: EdgeInsets.all(10.h),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Container(
-                    padding: const EdgeInsets.only(
-                        left: 10, right: 10, top: 5, bottom: 5),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(20.sp),
-                    ),
-                    child: const AppIcon(icon: Icons.favorite_border)),
-                Container(
-                    padding: const EdgeInsets.all(10),
-                    decoration: BoxDecoration(
-                        color: Theme.of(context).colorScheme.primary,
-                        borderRadius: BorderRadius.circular(10)),
-                    child: BigText(
-                      text: 'Thêm vào giỏ hàng',
-                      color: Colors.white,
-                      size: 35.sp,
-                    )),
-              ],
+            Container(
+              margin: EdgeInsets.all(10.h),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Container(
+                      padding: const EdgeInsets.only(
+                          left: 10, right: 10, top: 5, bottom: 5),
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(20.sp),
+                      ),
+                      child: const AppIcon(icon: Icons.favorite_border)),
+                  GestureDetector(
+                    onTap: () {
+                      controller.addItem(product);
+                    },
+                    child: Container(
+                        padding: const EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                            color: Theme.of(context).colorScheme.primary,
+                            borderRadius: BorderRadius.circular(10)),
+                        child: BigText(
+                          text: "${product.price!}.000 |Thêm vào giỏ hàng",
+                          color: Colors.white,
+                          size: 35.sp,
+                        )),
+                  )
+                ],
+              ),
             ),
-          ),
-        ],
-      ),
+          ],
+        );
+      }),
     );
   }
 }
