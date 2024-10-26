@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
-import 'package:food_delivery/features/cart/presemtation/ui/cart.dart';
+//import 'package:food_delivery/features/cart/presemtation/ui/cart.dart';
 import 'package:food_delivery/features/food/presentation/ui/popular_food_detail.dart';
 import 'package:food_delivery/features/food/presentation/ui/recommend_food_detail.dart';
 import 'package:food_delivery/features/home/presentation/ui/food_page_body.dart';

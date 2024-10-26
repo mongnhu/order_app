@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:food_delivery/data/repository/cart_repo.dart';
 import 'package:food_delivery/models/cart_model.dart';
 import 'package:food_delivery/models/products_model.dart';
@@ -6,14 +7,19 @@ import 'package:get/get.dart';
 class CartController extends GetxController {
   final CartRepo cartRepo;
   CartController({required this.cartRepo});
-  final Map<int, CartModel> _items = {};
+  Map<int, CartModel> _items = {};
+
+  Map<int, CartModel> get items => _items;
 
   void addItem(ProductModel product, int quantity) {
     // print("length of the item is" + _items.length.toString());
     _items.putIfAbsent(product.id!, () {
-      print("adding item to the cart${product.id!}quantity$quantity");
+      print("adding item to the cart" +
+          product.id!.toString() +
+          "quantity" +
+          quantity.toString());
       _items.forEach((key, value) {
-        print("quantity is${value.quantity}");
+        print("quantity is" + value.quantity.toString());
       });
       return CartModel(
         id: product.id,
