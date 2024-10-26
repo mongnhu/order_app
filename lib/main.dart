@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           //   useMaterial3: true,
           //   fontFamily: 'Mulish',
           // ),
-          home: MainFoodPage(),
+          home: const MainFoodPage(),
           initialRoute: RouteHelper.initial,
           getPages: RouteHelper.routes,
         );

@@ -29,9 +29,9 @@ class RecommendedFoodDetail extends StatelessWidget {
                   onTap: () {
                     Get.toNamed(RouteHelper.getInitial());
                   },
-                  child: AppIcon(icon: Icons.close),
+                  child: const AppIcon(icon: Icons.close),
                 ),
-                AppIcon(icon: Icons.shopping_cart_outlined)
+                const AppIcon(icon: Icons.shopping_cart_outlined)
               ],
             ),
             bottom: PreferredSize(
@@ -68,7 +68,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                     // trimExpandedText: 'Bớt',
                     // colorClickableText: Colors.pinkAccent,
                     // trimLength: 400,
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                    style: const TextStyle(fontStyle: FontStyle.italic),
                   ),
                 ),
               ],

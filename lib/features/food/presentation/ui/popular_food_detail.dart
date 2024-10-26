@@ -18,8 +18,8 @@ class PopularFoodDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     var product =
         Get.find<PopularProductController>().popularProductList[pageId];
-    print("page is id " + pageId.toString());
-    print("product name is " + product.name.toString());
+    print("page is id $pageId");
+    print("product name is ${product.name}");
     Get.find<PopularProductController>()
         .initProduct(Get.find<CartController>());
 
@@ -55,10 +55,10 @@ class PopularFoodDetail extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Get.to(() => MainFoodPage());
+                      Get.to(() => const MainFoodPage());
                     },
-                    child: AppIcon(icon: Icons.arrow_back_ios_rounded)),
-                AppIcon(icon: Icons.shopping_cart),
+                    child: const AppIcon(icon: Icons.arrow_back_ios_rounded)),
+                const AppIcon(icon: Icons.shopping_cart),
               ],
             ),
           ),
@@ -133,7 +133,7 @@ class PopularFoodDetail extends StatelessWidget {
                           onTap: () {
                             popularProduct.setQuantity(false);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.remove,
                             size: 20,
                           )),
@@ -145,7 +145,7 @@ class PopularFoodDetail extends StatelessWidget {
                           onTap: () {
                             popularProduct.setQuantity(true);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.add,
                             size: 20,
                           )),

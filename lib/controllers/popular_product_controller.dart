@@ -34,11 +34,11 @@ class PopularProductController extends GetxController {
 
   void setQuantity(bool isIncrement) {
     if (isIncrement) {
-      print("increment" + _quantity.toString());
+      print("increment$_quantity");
       _quantity = checkQuantity(_quantity + 1);
     } else {
       _quantity = checkQuantity(_quantity - 1);
-      print("decrement " + _quantity.toString());
+      print("decrement $_quantity");
     }
     update();
   }

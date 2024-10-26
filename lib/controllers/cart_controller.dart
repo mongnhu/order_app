@@ -6,17 +6,14 @@ import 'package:get/get.dart';
 class CartController extends GetxController {
   final CartRepo cartRepo;
   CartController({required this.cartRepo});
-  Map<int, CartModel> _items = {};
+  final Map<int, CartModel> _items = {};
 
   void addItem(ProductModel product, int quantity) {
     // print("length of the item is" + _items.length.toString());
     _items.putIfAbsent(product.id!, () {
-      print("adding item to the cart" +
-          product.id!.toString() +
-          "quantity" +
-          quantity.toString());
+      print("adding item to the cart${product.id!}quantity$quantity");
       _items.forEach((key, value) {
-        print("quantity is" + value.quantity.toString());
+        print("quantity is${value.quantity}");
       });
       return CartModel(
         id: product.id,
