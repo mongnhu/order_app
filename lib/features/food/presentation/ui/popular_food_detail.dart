@@ -8,12 +8,14 @@ import 'package:food_delivery/features/food/widgets/app_icon.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
 class PopularFoodDetail extends StatelessWidget {
   int pageId;
-  PopularFoodDetail({super.key, required this.pageId});
+  final String page;
+  PopularFoodDetail({super.key, required this.pageId, required this.page});
 
   @override
   Widget build(BuildContext context) {
@@ -56,41 +58,48 @@ class PopularFoodDetail extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Get.to(() => MainFoodPage());
+                      //Get.to(() => MainFoodPage());
+                      if (page == "cartpage") {
+                        Get.toNamed(RouteHelper.getCartPage());
+                      } else {
+                        Get.toNamed(RouteHelper.getInitial());
+                      }
                     },
                     child: AppIcon(icon: Icons.arrow_back_ios_rounded)),
                 GetBuilder<PopularProductController>(builder: (controller) {
-                  return Stack(
-                    children: [
-                      AppIcon(icon: Icons.shopping_cart),
-                      Get.find<PopularProductController>().totalItems >= 1
-                          ? Positioned(
-                              right: 3,
-                              top: 3,
-                              child: GestureDetector(
-                                onTap: () {
-                                  Get.to(() => CartPage());
-                                },
+                  return GestureDetector(
+                    onTap: () {
+                      if (controller.totalItems >= 1)
+                        Get.toNamed(RouteHelper.getCartPage());
+                    },
+                    child: Stack(
+                      children: [
+                        AppIcon(icon: Icons.shopping_cart),
+                        controller.totalItems >= 1
+                            ? Positioned(
+                                right: 3,
+                                top: 3,
                                 child: AppIcon(
                                   icon: Icons.circle,
                                   iconColor: Colors.transparent,
                                 ),
-                              ))
-                          : Container(),
-                      Get.find<PopularProductController>().totalItems >= 1
-                          ? Positioned(
-                              right: 0,
-                              top: 0,
-                              child: BigText(
-                                text: Get.find<PopularProductController>()
-                                    .totalItems
-                                    .toString(),
-                                color: Colors.black,
-                                size: 20,
-                              ),
-                            )
-                          : Container()
-                    ],
+                              )
+                            : Container(),
+                        Get.find<PopularProductController>().totalItems >= 1
+                            ? Positioned(
+                                right: 0,
+                                top: 0,
+                                child: BigText(
+                                  text: Get.find<PopularProductController>()
+                                      .totalItems
+                                      .toString(),
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
                   );
                 })
               ],
