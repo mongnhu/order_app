@@ -51,7 +51,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
 
         GetBuilder<PopularProductController>(builder: (popularProducts) {
           return popularProducts.isLoaded
-              ? Container(
+              ? SizedBox(
                   height: Dimensions.pageView,
                   child: PageView.builder(
                       controller: pageController,
@@ -61,7 +61,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                             popularProducts.popularProductList[position]);
                       }),
                 )
-              : CircularProgressIndicator();
+              : const CircularProgressIndicator();
         }),
 
         // SizedBox(
@@ -120,7 +120,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
         GetBuilder<RecommendedProductController>(builder: (recommendedProduct) {
           return recommendedProduct.isLoaded
               ? ListView.builder(
-                  physics: NeverScrollableScrollPhysics(),
+                  physics: const NeverScrollableScrollPhysics(),
                   shrinkWrap: true,
                   itemCount: recommendedProduct.recommendedProductList.length,
                   itemBuilder: (context, index) {
@@ -234,7 +234,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                     );
                   },
                 )
-              : CircularProgressIndicator();
+              : const CircularProgressIndicator();
         })
       ],
     );

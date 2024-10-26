@@ -21,8 +21,8 @@ class PopularFoodDetail extends StatelessWidget {
   Widget build(BuildContext context) {
     var product =
         Get.find<PopularProductController>().popularProductList[pageId];
-    print("page is id " + pageId.toString());
-    print("product name is " + product.name.toString());
+    print("page is id $pageId");
+    print("product name is ${product.name}");
     Get.find<PopularProductController>()
         .initProduct(product, Get.find<CartController>());
 
@@ -176,7 +176,7 @@ class PopularFoodDetail extends StatelessWidget {
                           onTap: () {
                             popularProduct.setQuantity(false);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.remove,
                             size: 20,
                           )),
@@ -188,7 +188,7 @@ class PopularFoodDetail extends StatelessWidget {
                           onTap: () {
                             popularProduct.setQuantity(true);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.add,
                             size: 20,
                           )),

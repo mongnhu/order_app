@@ -42,7 +42,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                       Get.toNamed(RouteHelper.getInitial());
                     }
                   },
-                  child: AppIcon(icon: Icons.close),
+                  child: const AppIcon(icon: Icons.close),
                 ),
                 //AppIcon(icon: Icons.shopping_cart_outlined)
                 GetBuilder<PopularProductController>(builder: (controller) {
@@ -117,7 +117,7 @@ class RecommendedFoodDetail extends StatelessWidget {
                     // trimExpandedText: 'Bớt',
                     // colorClickableText: Colors.pinkAccent,
                     // trimLength: 400,
-                    style: TextStyle(fontStyle: FontStyle.italic),
+                    style: const TextStyle(fontStyle: FontStyle.italic),
                   ),
                 ),
               ],
