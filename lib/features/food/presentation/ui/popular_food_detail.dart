@@ -62,7 +62,7 @@ class PopularFoodDetail extends StatelessWidget {
                 GetBuilder<PopularProductController>(builder: (controller) {
                   return Stack(
                     children: [
-                      AppIcon(icon: Icons.shopping_cart),
+                      const AppIcon(icon: Icons.shopping_cart),
                       Get.find<PopularProductController>().totalItems >= 1
                           ? Positioned(
                               right: 3,
