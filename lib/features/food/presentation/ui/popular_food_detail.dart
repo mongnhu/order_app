@@ -2,26 +2,29 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
+import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/food/widgets/app_column.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
 import 'package:readmore/readmore.dart';
 
 class PopularFoodDetail extends StatelessWidget {
   int pageId;
-  PopularFoodDetail({super.key, required this.pageId});
+  final String page;
+  PopularFoodDetail({super.key, required this.pageId, required this.page});
 
   @override
   Widget build(BuildContext context) {
     var product =
         Get.find<PopularProductController>().popularProductList[pageId];
-    print("page is id " + pageId.toString());
-    print("product name is " + product.name.toString());
+    print("page is id $pageId");
+    print("product name is ${product.name}");
     Get.find<PopularProductController>()
-        .initProduct(Get.find<CartController>());
+        .initProduct(product, Get.find<CartController>());
 
     return Scaffold(
       backgroundColor: Colors.white,
@@ -55,10 +58,50 @@ class PopularFoodDetail extends StatelessWidget {
               children: [
                 GestureDetector(
                     onTap: () {
-                      Get.to(() => MainFoodPage());
+                      //Get.to(() => MainFoodPage());
+                      if (page == "cartpage") {
+                        Get.toNamed(RouteHelper.getCartPage());
+                      } else {
+                        Get.toNamed(RouteHelper.getInitial());
+                      }
                     },
                     child: AppIcon(icon: Icons.arrow_back_ios_rounded)),
-                AppIcon(icon: Icons.shopping_cart),
+                GetBuilder<PopularProductController>(builder: (controller) {
+                  return GestureDetector(
+                    onTap: () {
+                      if (controller.totalItems >= 1)
+                        Get.toNamed(RouteHelper.getCartPage());
+                    },
+                    child: Stack(
+                      children: [
+                        AppIcon(icon: Icons.shopping_cart),
+                        controller.totalItems >= 1
+                            ? Positioned(
+                                right: 3,
+                                top: 3,
+                                child: AppIcon(
+                                  icon: Icons.circle,
+                                  iconColor: Colors.transparent,
+                                ),
+                              )
+                            : Container(),
+                        Get.find<PopularProductController>().totalItems >= 1
+                            ? Positioned(
+                                right: 0,
+                                top: 0,
+                                child: BigText(
+                                  text: Get.find<PopularProductController>()
+                                      .totalItems
+                                      .toString(),
+                                  color: Colors.black,
+                                  size: 20,
+                                ),
+                              )
+                            : Container()
+                      ],
+                    ),
+                  );
+                })
               ],
             ),
           ),
@@ -133,40 +176,41 @@ class PopularFoodDetail extends StatelessWidget {
                           onTap: () {
                             popularProduct.setQuantity(false);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.remove,
                             size: 20,
                           )),
                       SizedBox(width: 10.w),
                       //BigText(popularProduct.quantity.toString(),style: TextStyle(fontSize: 34.sp)),
-                      BigText(text: popularProduct.quantity.toString()),
+                      BigText(text: popularProduct.inCartItems.toString()),
                       SizedBox(width: 10.w),
                       GestureDetector(
                           onTap: () {
                             popularProduct.setQuantity(true);
                           },
-                          child: Icon(
+                          child: const Icon(
                             Icons.add,
                             size: 20,
                           )),
                     ],
                   ),
                 ),
-                Container(
+                GestureDetector(
+                  onTap: () {
+                    popularProduct.addItem(product);
+                  },
+                  child: Container(
                     padding: const EdgeInsets.all(10),
                     decoration: BoxDecoration(
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10)),
-                    child: GestureDetector(
-                      onTap: () {
-                        popularProduct.addItem(product);
-                      },
-                      child: BigText(
-                        text: "\$${product.price!} Thêm vào giỏ hàng",
-                        color: Colors.white,
-                        size: 35.sp,
-                      ),
-                    )),
+                    child: BigText(
+                      text: "${product.price!}k Thêm vào giỏ hàng",
+                      color: Colors.white,
+                      size: 35.sp,
+                    ),
+                  ),
+                ),
               ],
             ),
           );
