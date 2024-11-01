@@ -1,4 +1,3 @@
-import 'package:flutter/widgets.dart';
 import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/data/repository/popular_product_repo.dart';
 import 'package:food_delivery/models/cart_model.dart';
@@ -37,7 +36,7 @@ class PopularProductController extends GetxController {
     if (isIncrement) {
       print("increment$_quantity");
       _quantity = checkQuantity(_quantity + 1);
-      print("number of items " + _quantity.toString());
+      print("number of items $_quantity");
     } else {
       _quantity = checkQuantity(_quantity - 1);
       print("decrement $_quantity");
@@ -84,7 +83,6 @@ class PopularProductController extends GetxController {
     if (exist) {
       _inCartItems = _cart.getQuantity(product);
     }
-    print("Số lượng trong giỏ hàng là: " + _inCartItems.toString());
   }
 
   void addItem(ProductModel product) {
@@ -93,10 +91,7 @@ class PopularProductController extends GetxController {
     _inCartItems = _cart.getQuantity(product);
 
     _cart.items.forEach((Key, value) {
-      print("The id is " +
-          value.id.toString() +
-          " The quantity is " +
-          value.quantity.toString());
+      print("The id is ${value.id} The quantity is ${value.quantity}");
     });
 
     update();

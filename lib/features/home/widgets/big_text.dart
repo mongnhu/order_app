@@ -14,7 +14,7 @@ class BigText extends StatelessWidget {
     required this.text,
     this.overflow = TextOverflow.ellipsis,
     this.textStyle,
-    this.size = 30,
+    this.size,
   });
 
   @override
@@ -22,7 +22,7 @@ class BigText extends StatelessWidget {
     return Text(
       text,
       overflow: overflow,
-      style: TextStyle(fontSize: size?.sp, color: color),
+      style: TextStyle(fontSize: size?.sp ?? 30.sp, color: color),
     );
   }
 }
