@@ -3,7 +3,6 @@ import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
-import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/utils/dimensions.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
@@ -65,11 +64,11 @@ class CartPage extends StatelessWidget {
                     removeTop: true,
                     child:
                         GetBuilder<CartController>(builder: (cartController) {
-                      var _cartList = cartController.getItems;
+                      var cartList = cartController.getItems;
                       return ListView.builder(
-                          itemCount: _cartList.length,
+                          itemCount: cartList.length,
                           itemBuilder: (_, index) {
-                            return Container(
+                            return SizedBox(
                                 width: double.maxFinite,
                                 height: Dimensions.height20 * 5,
                                 child: Row(
@@ -80,7 +79,7 @@ class CartPage extends StatelessWidget {
                                                   PopularProductController>()
                                               .popularProductList
                                               .indexOf(
-                                                  _cartList[index].product!);
+                                                  cartList[index].product!);
                                           if (popularIndex >= 0) {
                                             Get.toNamed(
                                                 RouteHelper.getPopularFood(
@@ -90,7 +89,7 @@ class CartPage extends StatelessWidget {
                                                     RecommendedProductController>()
                                                 .recommendedProductList
                                                 .indexOf(
-                                                    _cartList[index].product!);
+                                                    cartList[index].product!);
                                             Get.toNamed(
                                                 RouteHelper.getRecommendedFood(
                                                     recommendedIndex,
@@ -121,7 +120,7 @@ class CartPage extends StatelessWidget {
                                       width: Dimensions.width10,
                                     ),
                                     Expanded(
-                                        child: Container(
+                                        child: SizedBox(
                                       height: Dimensions.height20 * 5,
                                       child: Column(
                                         crossAxisAlignment:
@@ -134,16 +133,14 @@ class CartPage extends StatelessWidget {
                                                 .getItems[index].name!,
                                             color: Colors.black54,
                                           ),
-                                          SmallText(text: "Đồ ăn vặt"),
+                                          const SmallText(text: "Đồ ăn vặt"),
                                           Row(
                                             mainAxisAlignment:
                                                 MainAxisAlignment.spaceBetween,
                                             children: [
                                               BigText(
-                                                text: "\$" +
-                                                    cartController
-                                                        .getItems[index].price
-                                                        .toString(),
+                                                text:
+                                                    "\$${cartController.getItems[index].price}",
                                                 color: Colors.redAccent,
                                               ),
                                               Container(
@@ -165,19 +162,19 @@ class CartPage extends StatelessWidget {
                                                           //popularProduct.setQuantity(false);
                                                           cartController
                                                               .addItem(
-                                                                  _cartList[
+                                                                  cartList[
                                                                           index]
                                                                       .product!,
                                                                   -1);
                                                         },
-                                                        child: Icon(
+                                                        child: const Icon(
                                                           Icons.remove,
                                                           size: 20,
                                                         )),
                                                     SizedBox(width: 10.w),
                                                     //BigText(popularProduct.quantity.toString(),style: TextStyle(fontSize: 34.sp)),
                                                     BigText(
-                                                        text: _cartList[index]
+                                                        text: cartList[index]
                                                             .quantity
                                                             .toString()), //popularProduct.inCartItems.toString()),
                                                     SizedBox(width: 10.w),
@@ -186,13 +183,13 @@ class CartPage extends StatelessWidget {
                                                           //popularProduct.setQuantity(true);
                                                           cartController
                                                               .addItem(
-                                                                  _cartList[
+                                                                  cartList[
                                                                           index]
                                                                       .product!,
                                                                   1);
                                                           print("being tapped");
                                                         },
-                                                        child: Icon(
+                                                        child: const Icon(
                                                           Icons.add,
                                                           size: 20,
                                                         )),
@@ -238,8 +235,7 @@ class CartPage extends StatelessWidget {
                       children: [
                         SizedBox(width: 10.w),
                         //BigText(popularProduct.quantity.toString(),style: TextStyle(fontSize: 34.sp)),
-                        BigText(
-                            text: "\$" + cartController.totalAmount.toString()),
+                        BigText(text: "\$${cartController.totalAmount}"),
                         SizedBox(width: 10.w),
                       ],
                     ),
