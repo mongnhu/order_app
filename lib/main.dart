@@ -7,9 +7,13 @@ import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
 import 'helper/dependencis.dart' as dep;
 
+import 'package:firebase_core/firebase_core.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
+  // WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
