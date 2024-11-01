@@ -1,8 +1,8 @@
 import 'package:food_delivery/features/cart/cart_page.dart';
+import 'package:food_delivery/features/cart/check_out_page.dart';
 import 'package:food_delivery/features/food/presentation/ui/popular_food_detail.dart';
 import 'package:food_delivery/features/food/presentation/ui/recommend_food_detail.dart';
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
-import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/splash/splash_page.dart';
 import 'package:get/get.dart';
 
@@ -12,18 +12,20 @@ class RouteHelper {
   static const String popularFood = "/popular-food";
   static const String recommendedFood = "/recommended-food";
   static const String cartPage = "/cart-page";
+  static const String checkoutPage = "/checkout-page";
 
-  static String getSplashPage() => '$splashPage';
-  static String getInitial() => '$initial';
+  static String getSplashPage() => splashPage;
+  static String getInitial() => initial;
   static String getPopularFood(int pageId, String page) =>
       '$popularFood?pageId=$pageId&page=$page';
   static String getRecommendedFood(int pageId, String page) =>
       '$recommendedFood?pageId=$pageId&page=$page';
-  static String getCartPage() => '$cartPage';
+  static String getCartPage() => cartPage;
+  static String getCheckoutPage() => checkoutPage;
 
   static List<GetPage> routes = [
-    GetPage(name: splashPage, page: () => SplashScreen()),
-    GetPage(name: initial, page: () => HomePage()),
+    GetPage(name: splashPage, page: () => const SplashScreen()),
+    GetPage(name: initial, page: () => const HomePage()),
     GetPage(
         name: popularFood,
         page: () {
@@ -45,8 +47,14 @@ class RouteHelper {
     GetPage(
         name: cartPage,
         page: () {
-          return CartPage();
+          return const CartPage();
         },
-        transition: Transition.fadeIn)
+        transition: Transition.fadeIn),
+    GetPage(
+        name: checkoutPage,
+        page: () {
+          return CheckoutPage();
+        },
+        transition: Transition.fadeIn),
   ];
 }

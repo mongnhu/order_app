@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
-import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/food/widgets/app_column.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
-import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
 import 'package:food_delivery/routes/route_helper.dart';
@@ -39,12 +37,11 @@ class PopularFoodDetail extends StatelessWidget {
               height: 0.4.sh,
               decoration: BoxDecoration(
                 image: DecorationImage(
-                    fit: BoxFit.cover,
-                    image: NetworkImage(AppConstants.BASE_URL +
-                        AppConstants.UPLOAD_URL +
-                        product.img!)
-                    //fit: BoxFit.cover
-                    ),
+                  fit: BoxFit.cover,
+                  image: NetworkImage(AppConstants.BASE_URL +
+                      AppConstants.UPLOAD_URL +
+                      product.img!),
+                ),
               ),
             ),
           ),
@@ -65,35 +62,39 @@ class PopularFoodDetail extends StatelessWidget {
                         Get.toNamed(RouteHelper.getInitial());
                       }
                     },
-                    child: AppIcon(icon: Icons.arrow_back_ios_rounded)),
+                    child: const AppIcon(icon: Icons.arrow_back_ios_rounded)),
                 GetBuilder<PopularProductController>(builder: (controller) {
                   return GestureDetector(
                     onTap: () {
-                      if (controller.totalItems >= 1)
-                        Get.toNamed(RouteHelper.getCartPage());
+                      Get.toNamed(RouteHelper.getCartPage());
                     },
                     child: Stack(
                       children: [
-                        AppIcon(icon: Icons.shopping_cart),
+                        AppIcon(
+                            icon: controller.totalItems >= 1
+                                ? Icons.shopping_cart_rounded
+                                : Icons.shopping_cart_outlined,
+                            iconColor:
+                                controller.totalItems >= 1 ? Colors.red : null,
+                            isLarge: controller.totalItems >= 1),
                         controller.totalItems >= 1
-                            ? Positioned(
-                                right: 3,
-                                top: 3,
+                            ? const Positioned(
                                 child: AppIcon(
-                                  icon: Icons.circle,
-                                  iconColor: Colors.transparent,
+                                  icon: Icons.shopping_cart_rounded,
+                                  iconColor: Colors.red,
+                                  isLarge: true,
                                 ),
                               )
                             : Container(),
                         Get.find<PopularProductController>().totalItems >= 1
                             ? Positioned(
-                                right: 0,
-                                top: 0,
+                                right: 3,
+                                top: 2,
                                 child: BigText(
                                   text: Get.find<PopularProductController>()
                                       .totalItems
                                       .toString(),
-                                  color: Colors.black,
+                                  color: Colors.red,
                                   size: 20,
                                 ),
                               )
@@ -205,7 +206,7 @@ class PopularFoodDetail extends StatelessWidget {
                         color: Theme.of(context).colorScheme.primary,
                         borderRadius: BorderRadius.circular(10)),
                     child: BigText(
-                      text: "${product.price!}k Thêm vào giỏ hàng",
+                      text: "\$${product.price!} Add Cart",
                       color: Colors.white,
                       size: 35.sp,
                     ),
