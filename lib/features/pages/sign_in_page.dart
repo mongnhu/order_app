@@ -1,12 +1,14 @@
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/pages/sign_up_page.dart';
-import 'package:food_delivery/services/auth_service.dart';
+// import 'package:food_delivery/services/auth_service.dart';
 
 class SignInPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
+
+  SignInPage({super.key});
   // final AuthService _authService = AuthService();
   void _login() {
     String email = _emailController.text;
@@ -57,34 +59,34 @@ class SignInPage extends StatelessWidget {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          padding: EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
           child: Column(
             children: [
               Image.asset('assets/images/logo part 1.png'),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 // controller: emailController,
                 decoration: InputDecoration(
                   labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
+                  prefixIcon: const Icon(Icons.email),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextField(
                 // controller: passwordController,
                 obscureText: true,
                 decoration: InputDecoration(
                   labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
+                  prefixIcon: const Icon(Icons.lock),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
                 ),
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.tealAccent[400],
@@ -106,7 +108,7 @@ class SignInPage extends StatelessWidget {
                 //   //   // Hiển thị thông báo lỗi
                 //   // }
                 // },
-                child: Text('Login'),
+                child: const Text('Login'),
               ),
               TextButton(
                 onPressed: () {
@@ -115,7 +117,7 @@ class SignInPage extends StatelessWidget {
                     MaterialPageRoute(builder: (context) => SignUpPage()),
                   );
                 },
-                child: Text('Don\'t have an account? Sign Up'),
+                child: const Text('Don\'t have an account? Sign Up'),
               ),
             ],
           ),

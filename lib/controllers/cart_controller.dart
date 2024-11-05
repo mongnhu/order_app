@@ -92,9 +92,7 @@ class CartController extends GetxController {
   }
 
   List<CartModel> get getItems {
-    return _items.entries.map((e) {
-      return e.value;
-    }).toList();
+    return _items.values.toList();
   }
 
   int get totalAmount {
@@ -122,11 +120,12 @@ class CartController extends GetxController {
 
   void addToCartHistory() {
     cartRepo.addToCartListHistory();
-    clear();
+    // clear();
   }
 
   void clear() {
     _items = {};
+    cartRepo.removeCart();
     update();
   }
 

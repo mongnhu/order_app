@@ -1,12 +1,12 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_auth/firebase_auth.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:food_delivery/models/signup_model.dart';
 
-import '../../services/auth_service.dart';
-import '../../services/firestore_service.dart';
+// import '../../services/auth_service.dart';
+// import '../../services/firestore_service.dart';
 
 // import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 
@@ -15,6 +15,8 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+
+  SignUpPage({super.key});
   // final AuthService _authService = AuthService();
   // final FirestoreService _firestoreService = FirestoreService();
 
@@ -65,57 +67,57 @@ class SignUpPage extends StatelessWidget {
                 Image.asset(
                   'assets/images/logo part 1.png',
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // TextField cho email
                 TextField(
                   controller: _emailController,
                   decoration: InputDecoration(
                     labelText: 'Email',
-                    prefixIcon: Icon(Icons.email),
+                    prefixIcon: const Icon(Icons.email),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // TextField cho password
                 TextField(
                   controller: _passwordController,
                   obscureText: true,
                   decoration: InputDecoration(
                     labelText: 'Password',
-                    prefixIcon: Icon(Icons.lock),
+                    prefixIcon: const Icon(Icons.lock),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // TextField cho phone
                 TextField(
                   controller: _phoneController,
                   keyboardType: TextInputType.phone,
                   decoration: InputDecoration(
                     labelText: 'Phone',
-                    prefixIcon: Icon(Icons.phone),
+                    prefixIcon: const Icon(Icons.phone),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // TextField cho name
                 TextField(
                   controller: _nameController,
                   decoration: InputDecoration(
                     labelText: 'Name',
-                    prefixIcon: Icon(Icons.person),
+                    prefixIcon: const Icon(Icons.person),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(30),
                     ),
                   ),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Nút Sign Up
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
@@ -123,9 +125,9 @@ class SignUpPage extends StatelessWidget {
                     foregroundColor: Colors.white,
                   ),
                   onPressed: () => _signUp(context),
-                  child: Text('Sign Up'),
+                  child: const Text('Sign Up'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Liên kết đến trang đăng nhập
                 TextButton(
                   onPressed: () {
@@ -134,11 +136,11 @@ class SignUpPage extends StatelessWidget {
                       MaterialPageRoute(builder: (context) => SignInPage()),
                     );
                   },
-                  child: Text('Have an account?'),
+                  child: const Text('Have an account?'),
                 ),
-                SizedBox(height: 10),
+                const SizedBox(height: 10),
                 // Các nút đăng nhập bằng social
-                Row(
+                const Row(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     // Nút Google
@@ -179,10 +181,10 @@ class SignUpPage extends StatelessWidget {
 
     try {
       // Lưu vào Firestore
-      await FirebaseFirestore.instance.collection('users').add(newUser.toMap());
+      // await FirebaseFirestore.instance.collection('users').add(newUser.toMap());
 
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đăng ký thành công!')),
+        const SnackBar(content: Text('Đăng ký thành công!')),
       );
 
       // Chuyển đến trang đăng nhập hoặc trang chính

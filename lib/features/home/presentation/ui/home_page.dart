@@ -4,11 +4,8 @@ import 'package:food_delivery/features/cart/cart_history.dart';
 import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/controllers/auth_controller.dart';
-import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
 import 'package:food_delivery/features/pages/profile_page.dart';
 // import 'package:food_delivery/features/pages/profile_page.dart';
-import 'package:food_delivery/features/pages/sign_up_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -24,10 +21,6 @@ class _HomePageState extends State<HomePage> {
       PersistentTabController(initialIndex: 0);
   List pages = [
     const MainFoodPage(),
-    Container(child: const Center(child: Text("Next page"))),
-    Container(child: const Center(child: Text("Next next page"))),
-    Container(child: const Center(child: Text("Next next next page"))),
-    MainFoodPage(),
     Container(child: Center(child: Text("Next page"))),
     Container(child: Center(child: Text("Next next page"))),
     ProFilePage(),
@@ -52,7 +45,6 @@ class _HomePageState extends State<HomePage> {
       const MainFoodPage(),
       const CartHistory(),
       const CartPage(),
-      Container(child: const Center(child: Text("Next next next page"))),
       ProFilePage(),
       // SignUpPage(),
       // ProfileFormPage(),

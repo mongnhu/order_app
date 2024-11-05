@@ -65,7 +65,7 @@ class CartRepo {
       print("History CartList ${cart[i]}");
       cartHistory.add(cart[i]);
     }
-    removeCart();
+    // removeCart();
     sharedPreferences.setStringList(
         AppConstants.CART_LIST_HISTORY, cartHistory);
     print(
