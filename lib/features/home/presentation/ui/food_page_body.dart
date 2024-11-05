@@ -3,7 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
-import 'package:food_delivery/features/food/presentation/ui/popular_food_detail.dart';
 import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/utils/dimensions.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
@@ -82,7 +81,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             dotsCount: populaeProducts.popularProductList.isEmpty
                 ? 1
                 : populaeProducts.popularProductList.length,
-            position: _curPageValue,
+            position: _curPageValue.toInt(),
             decorator: DotsDecorator(
               activeColor: Theme.of(context).colorScheme.primary,
               size: const Size.square(9.0),
@@ -94,28 +93,13 @@ class _FoodPageBodyState extends State<FoodPageBody> {
           );
         }),
         // Popular
-        SizedBox(height: 20.h),
         Container(
-          margin: EdgeInsets.only(left: 30.w),
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.end,
-            children: [
-              Container(
-                child: const BigText(text: 'Popular'),
-              ),
-              SizedBox(width: 10.w),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 3),
-                  child: const BigText(text: '.')),
-              SizedBox(width: 10.w),
-              Container(
-                  margin: const EdgeInsets.only(bottom: 3),
-                  child: const SmallText(text: 'pairing'))
-            ],
-          ),
+          margin: EdgeInsets.only(left: 30.w, top: 10.h),
+          alignment: Alignment.centerLeft,
+          child: const BigText(text: 'Recommended'),
         ),
 
-        SizedBox(height: 20.h),
+        SizedBox(height: 10.h),
         // List of popular food
         GetBuilder<RecommendedProductController>(builder: (recommendedProduct) {
           return recommendedProduct.isLoaded

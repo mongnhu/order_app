@@ -1,7 +1,11 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/features/cart/cart_history.dart';
+import 'package:food_delivery/features/cart/cart_page.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
-import 'package:flutter/src/material/bottom_navigation_bar.dart';
+import 'package:food_delivery/controllers/auth_controller.dart';
+import 'package:food_delivery/features/pages/profile_page.dart';
+// import 'package:food_delivery/features/pages/profile_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -16,10 +20,12 @@ class _HomePageState extends State<HomePage> {
   PersistentTabController _controller =
       PersistentTabController(initialIndex: 0);
   List pages = [
-    MainFoodPage(),
+    const MainFoodPage(),
     Container(child: Center(child: Text("Next page"))),
     Container(child: Center(child: Text("Next next page"))),
-    Container(child: Center(child: Text("Next next next page"))),
+    ProFilePage(),
+    // SignUpPage(),
+    // ProfileFormPage(),
   ];
 
   void onTapNav(int index) {
@@ -36,17 +42,19 @@ class _HomePageState extends State<HomePage> {
 
   List<Widget> _buildScreens() {
     return [
-      MainFoodPage(),
-      Container(child: Center(child: Text("Next page"))),
-      Container(child: Center(child: Text("Next next page"))),
-      Container(child: Center(child: Text("Next next next page"))),
+      const MainFoodPage(),
+      const CartHistory(),
+      const CartPage(),
+      ProFilePage(),
+      // SignUpPage(),
+      // ProfileFormPage(),
     ];
   }
 
   List<PersistentBottomNavBarItem> _navBarsItems() {
     return [
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.home),
+        icon: const Icon(CupertinoIcons.home),
         title: ("Home"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -60,7 +68,7 @@ class _HomePageState extends State<HomePage> {
         // ),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.archivebox_fill),
+        icon: const Icon(CupertinoIcons.archivebox_fill),
         title: ("Archive"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -74,7 +82,7 @@ class _HomePageState extends State<HomePage> {
         // ),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.cart_fill),
+        icon: const Icon(CupertinoIcons.cart_fill),
         title: ("Cart"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
@@ -88,7 +96,7 @@ class _HomePageState extends State<HomePage> {
         // ),
       ),
       PersistentBottomNavBarItem(
-        icon: Icon(CupertinoIcons.person),
+        icon: const Icon(CupertinoIcons.person),
         title: ("Me"),
         activeColorPrimary: CupertinoColors.activeBlue,
         inactiveColorPrimary: CupertinoColors.systemGrey,
