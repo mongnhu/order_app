@@ -1,29 +1,27 @@
-class User {
-  final String avatarUrl;
+import 'package:cloud_firestore/cloud_firestore.dart';
+
+class UserModel {
+  final String id;
+  final String email;
   final String name;
   final String phone;
-  final String email;
-  final String address;
-  final String notes;
+  final String avatarUrl; // Add other fields as needed
 
-  User({
-    required this.avatarUrl,
+  UserModel({
+    required this.id,
+    required this.email,
     required this.name,
     required this.phone,
-    required this.email,
-    required this.address,
-    required this.notes,
+    required this.avatarUrl,
   });
 
-  // Chuyển đổi dữ liệu từ Firestore sang User
-  factory User.fromMap(Map<String, dynamic> data) {
-    return User(
-      avatarUrl: data['avatarUrl'] ?? '',
-      name: data['name'] ?? '',
-      phone: data['phone'] ?? '',
-      email: data['email'] ?? '',
-      address: data['address'] ?? '',
-      notes: data['notes'] ?? '',
+  factory UserModel.fromDocument(DocumentSnapshot doc) {
+    return UserModel(
+      id: doc.id,
+      email: doc['email'],
+      name: doc['name'],
+      phone: doc['phone'],
+      avatarUrl: doc['avatarUrl'] ?? '', // Handle missing fields appropriately
     );
   }
 }

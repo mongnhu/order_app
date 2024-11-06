@@ -3,6 +3,7 @@ import 'package:food_delivery/features/food/presentation/ui/popular_food_detail.
 import 'package:food_delivery/features/food/presentation/ui/recommend_food_detail.dart';
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
+import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:food_delivery/features/splash/splash_page.dart';
 import 'package:get/get.dart';
 

@@ -1,55 +1,49 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
+
+import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/pages/sign_up_page.dart';
-import 'package:food_delivery/services/auth_service.dart';
 
-class SignInPage extends StatelessWidget {
-  final TextEditingController _emailController = TextEditingController();
-  final TextEditingController _passwordController = TextEditingController();
-  // final AuthService _authService = AuthService();
-  void _login() {
-    String email = _emailController.text;
-    String password = _passwordController.text;
+import '../../firebase/auth_service.dart';
 
-    // Logic để xác thực email và password
-    if (email.isNotEmpty && password.isNotEmpty) {
-      // Bạn có thể thêm logic gọi API ở đây
-      print('Email: $email');
-      print('Password: $password');
-      // Thực hiện hành động đăng nhập
+class SignInPage extends StatefulWidget {
+  @override
+  _SignInPageState createState() => _SignInPageState();
+}
+
+class _SignInPageState extends State<SignInPage> {
+  final _formKey = GlobalKey<FormState>();
+  final _emailController = TextEditingController();
+  final _passwordController = TextEditingController();
+  final AuthService _authService = AuthService(); // Initialize AuthService
+
+  Future<void> _login() async {
+    final user = await _authService.login(
+      _emailController.text,
+      _passwordController.text,
+    );
+    if (user != null) {
+      // Login successful
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login successful!'),
+          backgroundColor: Colors.green,
+        ),
+      );
+      // Navigate to MainPage
+      Navigator.pushReplacement(
+        context,
+        MaterialPageRoute(builder: (context) => MainFoodPage()),
+      );
     } else {
-      // Thông báo lỗi nếu email hoặc password rỗng
-      print('Vui lòng nhập email và password.');
+      // Login failed
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text('Login failed! Check your email and password.'),
+          backgroundColor: Colors.red,
+        ),
+      );
     }
   }
-  // void _signIn(BuildContext context) async {
-  //   //   if (_emailController.text.isNotEmpty &&
-  //   //       _passwordController.text.isNotEmpty) {
-  //   //     User? user = await _authService.signIn(
-  //   //       _emailController.text.trim(),
-  //   //       _passwordController.text.trim(),
-  //   //     );
-
-  //   //     if (user != null) {
-  //   //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Đăng nhập thành công!')),
-  //       );
-  //       Navigator.pushReplacement(
-  //         context,
-  //         MaterialPageRoute(builder: (context) => HomePage()),
-  //       );
-  //     } else {
-  //       ScaffoldMessenger.of(context).showSnackBar(
-  //         SnackBar(content: Text('Đăng nhập thất bại!')),
-  //       );
-  //     }
-  //   } else {
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")),
-  //     );
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -58,69 +52,83 @@ class SignInPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Image.asset('assets/images/logo part 1.png'),
-              SizedBox(height: 10),
-              TextField(
-                // controller: emailController,
-                decoration: InputDecoration(
-                  labelText: 'Email',
-                  prefixIcon: Icon(Icons.email),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+          child: Form(
+            key: _formKey,
+            child: Column(
+              children: [
+                Image.asset('assets/images/logo part 1.png'),
+                SizedBox(height: 20),
+                TextFormField(
+                  controller: _emailController,
+                  decoration: InputDecoration(
+                    labelText: 'Email',
+                    prefixIcon: Icon(Icons.email),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your email';
+                    }
+                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                      return 'Enter a valid email';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              SizedBox(height: 10),
-              TextField(
-                // controller: passwordController,
-                obscureText: true,
-                decoration: InputDecoration(
-                  labelText: 'Password',
-                  prefixIcon: Icon(Icons.lock),
-                  border: OutlineInputBorder(
-                    borderRadius: BorderRadius.circular(30),
+                SizedBox(height: 10),
+                TextFormField(
+                  controller: _passwordController,
+                  obscureText: true,
+                  decoration: InputDecoration(
+                    labelText: 'Password',
+                    prefixIcon: Icon(Icons.lock),
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(30),
+                    ),
                   ),
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return 'Please enter your password';
+                    }
+                    return null;
+                  },
                 ),
-              ),
-              SizedBox(height: 10),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent[400],
-                  foregroundColor: Colors.white,
+                SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.tealAccent[400],
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () {
+                    if (_formKey.currentState!.validate()) {
+                      _login();
+                    }
+                  },
+                  child: Text('Login'),
                 ),
-                onPressed: _login,
-                // onPressed: () async {
-                //   // // Thực hiện logic đăng nhập
-                //   // final success = await ApiService.login(
-                //   //   emailController.text,
-                //   //   passwordController.text,
-                //   // );
-                //   // if (success) {
-                //   Navigator.push(
-                //     context,
-                //     MaterialPageRoute(builder: (context) => HomePage()),
-                //   );
-                //   // } else {
-                //   //   // Hiển thị thông báo lỗi
-                //   // }
-                // },
-                child: Text('Login'),
-              ),
-              TextButton(
-                onPressed: () {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignUpPage()),
-                  );
-                },
-                child: Text('Don\'t have an account? Sign Up'),
-              ),
-            ],
+                TextButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => SignUpPage()),
+                    );
+                  },
+                  child: Text("Don't have an account? Sign Up"),
+                ),
+              ],
+            ),
           ),
         ),
       ),
     );
+  }
+
+  @override
+  void dispose() {
+    _emailController.dispose();
+    _passwordController.dispose();
+    super.dispose();
   }
 }

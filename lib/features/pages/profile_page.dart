@@ -1,7 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:food_delivery/features/pages/sign_in_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class ProFilePage extends StatelessWidget {
+class ProFilePage extends StatefulWidget {
+  @override
+  _ProFilePageState createState() => _ProFilePageState();
+}
+
+class _ProFilePageState extends State<ProFilePage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for form fields
@@ -12,21 +19,62 @@ class ProFilePage extends StatelessWidget {
   final TextEditingController addressController = TextEditingController();
   final TextEditingController notesController = TextEditingController();
 
-  // final String avatarUrl;
-  // final String name;
-  // final String phone;
-  // final String email;
-  // final String address;
-  // final String notes;
+  // Firebase instances
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
-  // ProFilePage({
-  //   required this.avatarUrl,
-  //   required this.name,
-  //   required this.phone,
-  //   required this.email,
-  //   required this.address,
-  //   required this.notes,
-  // });
+  // Load user data on page initialization
+  @override
+  void initState() {
+    super.initState();
+    _loadUserData();
+  }
+
+  Future<void> _loadUserData() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      emailController.text = user.email ?? '';
+
+      final userDoc = await _firestore.collection('users').doc(user.uid).get();
+      if (userDoc.exists) {
+        final data = userDoc.data();
+        setState(() {
+          avatarUrlController.text = data?['avatarUrl'] ?? '';
+          nameController.text = data?['name'] ?? '';
+          phoneController.text = data?['phone'] ?? '';
+          addressController.text = data?['address'] ?? '';
+          notesController.text = data?['notes'] ?? '';
+        });
+      } else {
+        print("User data does not exist.");
+      }
+    }
+  }
+
+  Future<void> _saveProfile() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set({
+        'avatarUrl': avatarUrlController.text,
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'address': addressController.text,
+        'notes': notesController.text,
+      }, SetOptions(merge: true));
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile updated successfully!')),
+      );
+    }
+  }
+
+  Future<void> _logout() async {
+    await _auth.signOut();
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => SignInPage()),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -38,7 +86,7 @@ class ProFilePage extends StatelessWidget {
         padding: const EdgeInsets.all(16.0),
         child: Form(
           key: _formKey,
-          child: Column(
+          child: ListView(
             children: [
               TextFormField(
                 controller: avatarUrlController,
@@ -55,6 +103,7 @@ class ProFilePage extends StatelessWidget {
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
+                readOnly: true, // Email is typically not editable
               ),
               TextFormField(
                 controller: addressController,
@@ -71,16 +120,19 @@ class ProFilePage extends StatelessWidget {
                   foregroundColor: Colors.white,
                 ),
                 onPressed: () {
-                  // if (_formKey.currentState!.validate()) {
-                  //   _showInfoDialog();
-                  // }
-                  // onPressed: _saveProfile,
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(builder: (context) => SignInPage()),
-                  );
+                  if (_formKey.currentState!.validate()) {
+                    _saveProfile();
+                  }
                 },
-                child: Text('log out'),
+                child: Text('Save Profile'),
+              ),
+              ElevatedButton(
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Colors.redAccent,
+                  foregroundColor: Colors.white,
+                ),
+                onPressed: _logout,
+                child: Text('Log out'),
               ),
             ],
           ),
@@ -89,63 +141,96 @@ class ProFilePage extends StatelessWidget {
     );
   }
 
-  // @override
-  // Widget build(BuildContext context) {
-  //   return Scaffold(
-  //     appBar: AppBar(
-  //       title: Text('Thông tin tài khoản'),
-  //     ),
-  //     body: Padding(
-  //       padding: const EdgeInsets.all(16.0),
-  //       child: Column(
-  //         children: [
-  //           CircleAvatar(
-  //             radius: 50,
-  //             backgroundImage: NetworkImage(avatarUrl),
-  //           ),
-  //           SizedBox(height: 16),
-  //           Text(
-  //             name,
-  //             style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
-  //           ),
-  //           SizedBox(height: 8),
-  //           Text(
-  //             'Số điện thoại: $phone',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           SizedBox(height: 8),
-  //           Text(
-  //             'Email: $email',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           SizedBox(height: 8),
-  //           Text(
-  //             'Địa chỉ: $address',
-  //             style: TextStyle(fontSize: 16),
-  //           ),
-  //           SizedBox(height: 8),
-  //           Text(
-  //             'Ghi chú: $notes',
-  //             style: TextStyle(fontSize: 16, fontStyle: FontStyle.italic),
-  //           ),
-  //           Spacer(),
-  //           ElevatedButton(
-  //             onPressed: () {
-  //               // Logic xử lý đăng xuất
-  //               // Navigator.pop(context); // Ví dụ chuyển về màn hình đăng nhập
-  //               Navigator.pop(
-  //                 context,
-  //                 MaterialPageRoute(builder: (context) => SignInPage()),
-  //               );
-  //             },
-  //             style: ElevatedButton.styleFrom(
-  //               backgroundColor: Colors.red,
-  //             ),
-  //             child: Text('Đăng xuất'),
-  //           ),
-  //         ],
-  //       ),
-  //     ),
-  //   );
-  // }
+  @override
+  void dispose() {
+    // Dispose of controllers to free resources
+    avatarUrlController.dispose();
+    nameController.dispose();
+    phoneController.dispose();
+    emailController.dispose();
+    addressController.dispose();
+    notesController.dispose();
+    super.dispose();
+  }
 }
+
+
+
+
+
+// import 'package:flutter/material.dart';
+// import 'package:food_delivery/features/pages/sign_in_page.dart';
+// import 'package:cloud_firestore/cloud_firestore.dart';
+
+// class ProFilePage extends StatelessWidget {
+//   final _formKey = GlobalKey<FormState>();
+
+//   // Controllers for form fields
+//   final TextEditingController avatarUrlController = TextEditingController();
+//   final TextEditingController nameController = TextEditingController();
+//   final TextEditingController phoneController = TextEditingController();
+//   final TextEditingController emailController = TextEditingController();
+//   final TextEditingController addressController = TextEditingController();
+//   final TextEditingController notesController = TextEditingController();
+
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(
+//         title: Text('Thông tin tài khoản'),
+//       ),
+//       body: Padding(
+//         padding: const EdgeInsets.all(16.0),
+//         child: Form(
+//           key: _formKey,
+//           child: Column(
+//             children: [
+//               TextFormField(
+//                 controller: avatarUrlController,
+//                 decoration: InputDecoration(labelText: 'Avatar URL'),
+//               ),
+//               TextFormField(
+//                 controller: nameController,
+//                 decoration: InputDecoration(labelText: 'Name'),
+//               ),
+//               TextFormField(
+//                 controller: phoneController,
+//                 decoration: InputDecoration(labelText: 'Phone'),
+//               ),
+//               TextFormField(
+//                 controller: emailController,
+//                 decoration: InputDecoration(labelText: 'Email'),
+//               ),
+//               TextFormField(
+//                 controller: addressController,
+//                 decoration: InputDecoration(labelText: 'Address'),
+//               ),
+//               TextFormField(
+//                 controller: notesController,
+//                 decoration: InputDecoration(labelText: 'Notes'),
+//               ),
+//               SizedBox(height: 20),
+//               ElevatedButton(
+//                 style: ElevatedButton.styleFrom(
+//                   backgroundColor: Colors.tealAccent[400],
+//                   foregroundColor: Colors.white,
+//                 ),
+//                 onPressed: () {
+//                   // if (_formKey.currentState!.validate()) {
+//                   //   _showInfoDialog();
+//                   // }
+//                   // onPressed: _saveProfile,
+//                   Navigator.push(
+//                     context,
+//                     MaterialPageRoute(builder: (context) => SignInPage()),
+//                   );
+//                 },
+//                 child: Text('log out'),
+//               ),
+//             ],
+//           ),
+//         ),
+//       ),
+//     );
+//   }
+// }
