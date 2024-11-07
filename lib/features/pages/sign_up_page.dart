@@ -1,167 +1,73 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
-// import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:food_delivery/models/signup_model.dart';
-
-// import '../../services/auth_service.dart';
-// import '../../services/firestore_service.dart';
-
-// import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:food_delivery/firebase/auth_service.dart';
 
 class SignUpPage extends StatelessWidget {
   final TextEditingController _emailController = TextEditingController();
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
+  final _formKey = GlobalKey<FormState>();
 
   SignUpPage({super.key});
-  // final AuthService _authService = AuthService();
-  // final FirestoreService _firestoreService = FirestoreService();
-
-  void _signUp(BuildContext context) async {
-    // if (_emailController.text.isNotEmpty &&
-    //     _passwordController.text.isNotEmpty) {
-    //   SignUpModel newUser = SignUpModel(
-    //     email: _emailController.text.trim(),
-    //     password: _passwordController.text.trim(),
-    //     phone: _phoneController.text.trim(),
-    //     name: _nameController.text.trim(),
-    //   );
-
-    //   User? user = await _authService.signUp(newUser.email, newUser.password);
-    //   if (user != null) {
-    //     await _firestoreService.createUser(newUser);
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text('Đăng ký thành công!')),
-    //     );
-    //     Navigator.pushReplacement(
-    //       context,
-    //       MaterialPageRoute(builder: (context) => HomePage()),
-    //     );
-    //   } else {
-    //     ScaffoldMessenger.of(context).showSnackBar(
-    //       SnackBar(content: Text('Đăng ký thất bại!')),
-    //     );
-    //   }
-    // } else {
-    //   ScaffoldMessenger.of(context).showSnackBar(
-    //     SnackBar(content: Text("Vui lòng nhập đầy đủ thông tin")),
-    //   );
-    // }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
         child: SingleChildScrollView(
-          child: Padding(
-            padding: const EdgeInsets.all(16.0),
+          padding: const EdgeInsets.all(16.0),
+          child: Form(
+            key: _formKey, // Gán key cho Form để quản lý trạng thái
             child: Column(
               children: [
-                // Logo
-
-                Image.asset(
-                  'assets/images/logo part 1.png',
-                ),
-                const SizedBox(height: 10),
-                // TextField cho email
-                TextField(
+                Image.asset('assets/images/logo part 1.png'),
+                const SizedBox(height: 20),
+                _buildTextField(
                   controller: _emailController,
-                  decoration: InputDecoration(
-                    labelText: 'Email',
-                    prefixIcon: const Icon(Icons.email),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  labelText: 'Email',
+                  icon: Icons.email,
+                  validator: _validateEmail,
                 ),
-                const SizedBox(height: 10),
-                // TextField cho password
-                TextField(
+                _buildTextField(
                   controller: _passwordController,
-                  obscureText: true,
-                  decoration: InputDecoration(
-                    labelText: 'Password',
-                    prefixIcon: const Icon(Icons.lock),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  labelText: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                  validator: _validatePassword,
                 ),
-                const SizedBox(height: 10),
-                // TextField cho phone
-                TextField(
+                _buildTextField(
                   controller: _phoneController,
+                  labelText: 'Phone',
+                  icon: Icons.phone,
                   keyboardType: TextInputType.phone,
-                  decoration: InputDecoration(
-                    labelText: 'Phone',
-                    prefixIcon: const Icon(Icons.phone),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  validator: _validatePhone,
                 ),
-                const SizedBox(height: 10),
-                // TextField cho name
-                TextField(
+                _buildTextField(
                   controller: _nameController,
-                  decoration: InputDecoration(
-                    labelText: 'Name',
-                    prefixIcon: const Icon(Icons.person),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(30),
-                    ),
-                  ),
+                  labelText: 'Name',
+                  icon: Icons.person,
+                  validator: _validateName,
                 ),
-                const SizedBox(height: 10),
-                // Nút Sign Up
+                const SizedBox(height: 20),
                 ElevatedButton(
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.tealAccent[400],
                     foregroundColor: Colors.white,
                   ),
-                  onPressed: () => _signUp(context),
+                  onPressed: () => _registerUser(context),
                   child: const Text('Sign Up'),
                 ),
-                const SizedBox(height: 10),
-                // Liên kết đến trang đăng nhập
                 TextButton(
-                  onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => SignInPage()),
-                    );
-                  },
-                  child: const Text('Have an account?'),
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInPage()),
+                  ),
+                  child: const Text('Have an account? Sign In'),
                 ),
-                const SizedBox(height: 10),
-                // Các nút đăng nhập bằng social
-                const Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    // Nút Google
-                    CircleAvatar(
-                        // child: FaIcon(
-                        //   FontAwesomeIcons.google,
-                        // ),
-                        ),
-                    // SizedBox(width: 20),
-                    // // Nút Twitter
-                    // CircleAvatar(
-                    //   backgroundColor: Colors.white,
-                    //   // child: Icon(Icons.twitter),
-                    // ),
-                    SizedBox(width: 30),
-                    // Nút Facebook
-                    CircleAvatar(
-                        // child: FaIcon(FontAwesomeIcons.facebookF),
-                        ),
-                  ],
-                ),
+                const SizedBox(height: 20),
+                _buildSocialButtons(),
               ],
             ),
           ),
@@ -170,49 +76,108 @@ class SignUpPage extends StatelessWidget {
     );
   }
 
-  Future<void> _registerUser(BuildContext context) async {
-    // Tạo đối tượng SignUpModel
-    SignUpModel newUser = SignUpModel(
-      email: _emailController.text.trim(),
-      password: _passwordController.text.trim(),
-      phone: _phoneController.text.trim(),
-      name: _nameController.text.trim(),
+  Widget _buildTextField({
+    required TextEditingController controller,
+    required String labelText,
+    required IconData icon,
+    bool isPassword = false,
+    TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
+  }) {
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: TextFormField(
+        controller: controller,
+        obscureText: isPassword,
+        keyboardType: keyboardType,
+        decoration: InputDecoration(
+          labelText: labelText,
+          prefixIcon: Icon(icon),
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(30),
+          ),
+        ),
+        validator: validator,
+      ),
     );
+  }
 
-    try {
-      // Lưu vào Firestore
-      // await FirebaseFirestore.instance.collection('users').add(newUser.toMap());
+  Widget _buildSocialButtons() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: const [
+        CircleAvatar(
+            // Customize with a Google icon, e.g. using FontAwesome
+            ),
+        SizedBox(width: 30),
+        CircleAvatar(
+            // Customize with a Facebook icon, e.g. using FontAwesome
+            ),
+      ],
+    );
+  }
 
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Đăng ký thành công!')),
+  Future<void> _registerUser(BuildContext context) async {
+    if (_formKey.currentState?.validate() ?? false) {
+      // If form is valid, proceed with registration
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+      final String phone = _phoneController.text.trim();
+      final String name = _nameController.text.trim();
+
+      final newUser = SignUpModel(
+        email: email,
+        password: password,
+        phone: phone,
+        name: name,
       );
 
-      // Chuyển đến trang đăng nhập hoặc trang chính
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SignInPage()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Đăng ký thất bại: $e')),
-      );
+      try {
+        await AuthService().registerUser(newUser);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign up successful!')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SignInPage()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign up failed: $e')),
+        );
+      }
     }
   }
 
-  Widget _buildTextField(IconData icon, String hint,
-      {bool isPassword = false}) {
-    return TextField(
-      obscureText: isPassword,
-      decoration: InputDecoration(
-        prefixIcon: Icon(icon),
-        hintText: hint,
-        filled: true,
-        fillColor: Colors.grey[200],
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(30),
-          borderSide: BorderSide.none,
-        ),
-      ),
-    );
+  // Hàm kiểm tra email
+  String? _validateEmail(String? email) {
+    if (email == null || email.isEmpty) return 'Email is required';
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.(com|vn|org|net|edu)$');
+    if (!emailRegex.hasMatch(email)) return 'Enter a valid email';
+    return null;
+  }
+
+  // Hàm kiểm tra mật khẩu
+  String? _validatePassword(String? password) {
+    if (password == null || password.isEmpty) return 'Password is required';
+    if (password.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  }
+
+  // Hàm kiểm tra số điện thoại
+  String? _validatePhone(String? phone) {
+    if (phone == null || phone.isEmpty) return 'Phone number is required';
+    final phoneRegex = RegExp(r'^\d{10,}$');
+    if (!phoneRegex.hasMatch(phone)) return 'Enter a valid phone number';
+    return null;
+  }
+
+  // Hàm kiểm tra tên
+  String? _validateName(String? name) {
+    if (name == null || name.isEmpty) return 'Name is required';
+    final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
+    if (!nameRegex.hasMatch(name))
+      return 'Enter a valid name (letters and spaces only)';
+    return null;
   }
 }
