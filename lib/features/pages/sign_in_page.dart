@@ -1,9 +1,10 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:food_delivery/features/pages/sign_up_page.dart';
-
-import '../../firebase/auth_service.dart';
+import 'package:food_delivery/firebase/auth_service.dart';
 
 class SignInPage extends StatefulWidget {
   @override
@@ -14,14 +15,14 @@ class _SignInPageState extends State<SignInPage> {
   final _formKey = GlobalKey<FormState>();
   final _emailController = TextEditingController();
   final _passwordController = TextEditingController();
-  final AuthService _authService = AuthService(); // Initialize AuthService
-
+  final AuthService _authService = AuthService();
   Future<void> _login() async {
-    final user = await _authService.login(
-      _emailController.text,
-      _passwordController.text,
+    final success = await _authService.login(
+      _emailController.text.trim(),
+      _passwordController.text.trim(),
     );
-    if (user != null) {
+
+    if (success) {
       // Login successful
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
@@ -32,7 +33,7 @@ class _SignInPageState extends State<SignInPage> {
       // Navigate to MainPage
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(builder: (context) => MainFoodPage()),
+        MaterialPageRoute(builder: (context) => HomePage()),
       );
     } else {
       // Login failed
@@ -71,7 +72,8 @@ class _SignInPageState extends State<SignInPage> {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your email';
                     }
-                    if (!RegExp(r'^[^@]+@[^@]+\.[^@]+').hasMatch(value)) {
+                    if (!RegExp(r'^[^@]+@[^@]+\.(com|vn|org|net|edu)$')
+                        .hasMatch(value)) {
                       return 'Enter a valid email';
                     }
                     return null;

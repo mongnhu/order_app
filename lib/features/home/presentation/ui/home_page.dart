@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/controllers/auth_controller.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
+import 'package:food_delivery/features/pages/edit_profile.dart';
 import 'package:food_delivery/features/pages/profile_page.dart';
 // import 'package:food_delivery/features/pages/profile_page.dart';
 import 'package:food_delivery/features/pages/sign_up_page.dart';
@@ -24,6 +25,7 @@ class _HomePageState extends State<HomePage> {
     Container(child: Center(child: Text("Next page"))),
     Container(child: Center(child: Text("Next next page"))),
     ProFilePage(),
+    // EditProfilePage(),
     // SignUpPage(),
     // ProfileFormPage(),
   ];
@@ -47,6 +49,7 @@ class _HomePageState extends State<HomePage> {
       Container(child: Center(child: Text("Next next page"))),
       // Container(child: Center(child: Text("Next next next page"))),
       ProFilePage(),
+      // EditProfilePage(),
       // SignUpPage(),
       // ProfileFormPage(),
     ];

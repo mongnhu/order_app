@@ -1,15 +1,14 @@
-import 'package:flutter/material.dart';
-import 'package:food_delivery/features/pages/edit_profile.dart';
-import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/material.dart';
+import 'package:food_delivery/features/pages/profile_page.dart';
 
-class ProFilePage extends StatefulWidget {
+class EditProfilePage extends StatefulWidget {
   @override
-  _ProFilePageState createState() => _ProFilePageState();
+  _EditProfilePageState createState() => _EditProfilePageState();
 }
 
-class _ProFilePageState extends State<ProFilePage> {
+class _EditProfilePageState extends State<EditProfilePage> {
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for form fields
@@ -52,52 +51,47 @@ class _ProFilePageState extends State<ProFilePage> {
     }
   }
 
-  // Future<void> _saveProfile() async {
-  //   final user = _auth.currentUser;
-  //   if (user != null) {
-  //     await _firestore.collection('users').doc(user.uid).set({
-  //       'avatarUrl': avatarUrlController.text,
-  //       'name': nameController.text,
-  //       'phone': phoneController.text,
-  //       'address': addressController.text,
-  //       'notes': notesController.text,
-  //     }, SetOptions(merge: true));
+  Future<void> _saveProfile() async {
+    final user = _auth.currentUser;
+    if (user != null) {
+      await _firestore.collection('users').doc(user.uid).set({
+        'avatarUrl': avatarUrlController.text,
+        'name': nameController.text,
+        'phone': phoneController.text,
+        'address': addressController.text,
+        'notes': notesController.text,
+      }, SetOptions(merge: true));
 
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Profile updated successfully!')),
-  //     );
-  //   }
-  // }
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Profile updated successfully!')),
+      );
+      Navigator.pop(context, true);
+    }
+  }
 
-  Future<void> _logout() async {
-    await _auth.signOut();
-    Navigator.pushReplacement(
-      context,
-      MaterialPageRoute(builder: (context) => SignInPage()),
-    );
+  void _updatePhoto() {
+    // Logic to update the photo
+  }
+
+  void _deletePhoto() {
+    // Logic to delete the photo
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: const Color.fromARGB(255, 253, 251, 252),
       appBar: AppBar(
         backgroundColor: Colors.transparent,
         elevation: 0,
-        title: Text('Complete Profile'),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.arrow_forward_ios, color: Colors.black),
-            onPressed: () async {
-              final result = await Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context) => EditProfilePage()),
-              );
-              if (result == true) {
-                _loadUserData(); // Reload data after editing
-              }
-            },
+        leading: IconButton(
+          icon: Icon(Icons.arrow_back, color: Colors.black),
+          onPressed: () => Navigator.pop(
+            context,
+            MaterialPageRoute(builder: (context) => ProFilePage()),
           ),
-        ],
+        ),
+        title: Text('Edit Profile', style: TextStyle(color: Colors.black)),
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
@@ -118,6 +112,22 @@ class _ProFilePageState extends State<ProFilePage> {
                   backgroundColor: Colors.teal[100],
                 ),
               ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  TextButton(
+                    onPressed: _updatePhoto,
+                    child: Text('Update new photo'),
+                  ),
+                  TextButton(
+                    onPressed: _deletePhoto,
+                    child: Text('Delete existing photo'),
+                  ),
+                ],
+              ),
+              const SizedBox(height: 20),
+
+              // Form fields for profile information
               TextFormField(
                 controller: nameController,
                 decoration: InputDecoration(labelText: 'Name'),
@@ -129,7 +139,7 @@ class _ProFilePageState extends State<ProFilePage> {
               TextFormField(
                 controller: emailController,
                 decoration: InputDecoration(labelText: 'Email'),
-                readOnly: true, // Email is typically not editable
+                readOnly: true, // Email is typically non-editable
               ),
               TextFormField(
                 controller: addressController,
@@ -140,25 +150,19 @@ class _ProFilePageState extends State<ProFilePage> {
                 decoration: InputDecoration(labelText: 'Notes'),
               ),
               SizedBox(height: 20),
-              // ElevatedButton(
-              //   style: ElevatedButton.styleFrom(
-              //     backgroundColor: Colors.tealAccent[400],
-              //     foregroundColor: Colors.white,
-              //   ),
-              //   onPressed: () {
-              //     if (_formKey.currentState!.validate()) {
-              //       _saveProfile();
-              //     }
-              //   },
-              //   child: Text('Save Profile'),
-              // ),
+
+              // Save button
               ElevatedButton(
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.redAccent,
+                  backgroundColor: Colors.tealAccent[400],
                   foregroundColor: Colors.white,
                 ),
-                onPressed: _logout,
-                child: Text('Log out'),
+                onPressed: () {
+                  if (_formKey.currentState!.validate()) {
+                    _saveProfile();
+                  }
+                },
+                child: Text('Save Profile'),
               ),
             ],
           ),

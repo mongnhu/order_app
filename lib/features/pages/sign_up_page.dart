@@ -9,7 +9,7 @@ class SignUpPage extends StatelessWidget {
   final TextEditingController _passwordController = TextEditingController();
   final TextEditingController _phoneController = TextEditingController();
   final TextEditingController _nameController = TextEditingController();
-
+  final _formKey = GlobalKey<FormState>();
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -17,51 +17,58 @@ class SignUpPage extends StatelessWidget {
       body: SafeArea(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(16.0),
-          child: Column(
-            children: [
-              Image.asset('assets/images/logo part 1.png'),
-              const SizedBox(height: 20),
-              _buildTextField(
-                controller: _emailController,
-                labelText: 'Email',
-                icon: Icons.email,
-              ),
-              _buildTextField(
-                controller: _passwordController,
-                labelText: 'Password',
-                icon: Icons.lock,
-                isPassword: true,
-              ),
-              _buildTextField(
-                controller: _phoneController,
-                labelText: 'Phone',
-                icon: Icons.phone,
-                keyboardType: TextInputType.phone,
-              ),
-              _buildTextField(
-                controller: _nameController,
-                labelText: 'Name',
-                icon: Icons.person,
-              ),
-              const SizedBox(height: 20),
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.tealAccent[400],
-                  foregroundColor: Colors.white,
+          child: Form(
+            key: _formKey, // Gán key cho Form để quản lý trạng thái
+            child: Column(
+              children: [
+                Image.asset('assets/images/logo part 1.png'),
+                const SizedBox(height: 20),
+                _buildTextField(
+                  controller: _emailController,
+                  labelText: 'Email',
+                  icon: Icons.email,
+                  validator: _validateEmail,
                 ),
-                onPressed: () => _registerUser(context),
-                child: const Text('Sign Up'),
-              ),
-              TextButton(
-                onPressed: () => Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SignInPage()),
+                _buildTextField(
+                  controller: _passwordController,
+                  labelText: 'Password',
+                  icon: Icons.lock,
+                  isPassword: true,
+                  validator: _validatePassword,
                 ),
-                child: const Text('Have an account? Sign In'),
-              ),
-              const SizedBox(height: 20),
-              _buildSocialButtons(),
-            ],
+                _buildTextField(
+                  controller: _phoneController,
+                  labelText: 'Phone',
+                  icon: Icons.phone,
+                  keyboardType: TextInputType.phone,
+                  validator: _validatePhone,
+                ),
+                _buildTextField(
+                  controller: _nameController,
+                  labelText: 'Name',
+                  icon: Icons.person,
+                  validator: _validateName,
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton(
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.tealAccent[400],
+                    foregroundColor: Colors.white,
+                  ),
+                  onPressed: () => _registerUser(context),
+                  child: const Text('Sign Up'),
+                ),
+                TextButton(
+                  onPressed: () => Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => SignInPage()),
+                  ),
+                  child: const Text('Have an account? Sign In'),
+                ),
+                const SizedBox(height: 20),
+                _buildSocialButtons(),
+              ],
+            ),
           ),
         ),
       ),
@@ -74,10 +81,11 @@ class SignUpPage extends StatelessWidget {
     required IconData icon,
     bool isPassword = false,
     TextInputType keyboardType = TextInputType.text,
+    String? Function(String?)? validator,
   }) {
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
-      child: TextField(
+      child: TextFormField(
         controller: controller,
         obscureText: isPassword,
         keyboardType: keyboardType,
@@ -88,6 +96,7 @@ class SignUpPage extends StatelessWidget {
             borderRadius: BorderRadius.circular(30),
           ),
         ),
+        validator: validator,
       ),
     );
   }
@@ -108,42 +117,66 @@ class SignUpPage extends StatelessWidget {
   }
 
   Future<void> _registerUser(BuildContext context) async {
-    final String email = _emailController.text.trim();
-    final String password = _passwordController.text.trim();
-    final String phone = _phoneController.text.trim();
-    final String name = _nameController.text.trim();
+    if (_formKey.currentState?.validate() ?? false) {
+      // If form is valid, proceed with registration
+      final String email = _emailController.text.trim();
+      final String password = _passwordController.text.trim();
+      final String phone = _phoneController.text.trim();
+      final String name = _nameController.text.trim();
 
-    // Check if email is already registered
-    if (await AuthService().isEmailRegistered(email)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(
-            content:
-                Text('This email is already registered. Please try another.')),
+      final newUser = SignUpModel(
+        email: email,
+        password: password,
+        phone: phone,
+        name: name,
       );
-      return;
+
+      try {
+        await AuthService().registerUser(newUser);
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign up successful!')),
+        );
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => SignInPage()),
+        );
+      } catch (e) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Sign up failed: $e')),
+        );
+      }
     }
+  }
 
-    // Proceed with registration if email is not registered
-    final newUser = SignUpModel(
-      email: email,
-      password: password,
-      phone: phone,
-      name: name,
-    );
+  // Hàm kiểm tra email
+  String? _validateEmail(String? email) {
+    if (email == null || email.isEmpty) return 'Email is required';
+    final emailRegex = RegExp(r'^[^@]+@[^@]+\.(com|vn|org|net|edu)$');
+    if (!emailRegex.hasMatch(email)) return 'Enter a valid email';
+    return null;
+  }
 
-    try {
-      await AuthService().registerUser(newUser);
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign up successful!')),
-      );
-      Navigator.pushReplacement(
-        context,
-        MaterialPageRoute(builder: (context) => SignInPage()),
-      );
-    } catch (e) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Sign up failed: $e')),
-      );
-    }
+  // Hàm kiểm tra mật khẩu
+  String? _validatePassword(String? password) {
+    if (password == null || password.isEmpty) return 'Password is required';
+    if (password.length < 6) return 'Password must be at least 6 characters';
+    return null;
+  }
+
+  // Hàm kiểm tra số điện thoại
+  String? _validatePhone(String? phone) {
+    if (phone == null || phone.isEmpty) return 'Phone number is required';
+    final phoneRegex = RegExp(r'^\d{10,}$');
+    if (!phoneRegex.hasMatch(phone)) return 'Enter a valid phone number';
+    return null;
+  }
+
+  // Hàm kiểm tra tên
+  String? _validateName(String? name) {
+    if (name == null || name.isEmpty) return 'Name is required';
+    final nameRegex = RegExp(r'^[a-zA-Z\s]+$');
+    if (!nameRegex.hasMatch(name))
+      return 'Enter a valid name (letters and spaces only)';
+    return null;
   }
 }
