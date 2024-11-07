@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:food_delivery/controllers/cart_controller.dart';
 import 'package:food_delivery/features/food/widgets/app_icon.dart';
@@ -5,14 +7,18 @@ import 'package:food_delivery/features/home/utils/app_constants.dart';
 import 'package:food_delivery/features/home/widgets/big_text.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:food_delivery/features/home/widgets/small_text.dart';
+import 'package:food_delivery/models/cart_model.dart';
+import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
+import 'package:intl/intl.dart';
 
 class CartHistory extends StatelessWidget {
   const CartHistory({super.key});
 
   @override
   Widget build(BuildContext context) {
-    var getHistoryCartList = Get.find<CartController>().getHistoryCartList();
+    var getHistoryCartList =
+        Get.find<CartController>().getHistoryCartList().reversed.toList();
 
     Map<String, int> cartItemPerOder = {};
 
@@ -24,11 +30,15 @@ class CartHistory extends StatelessWidget {
       }
     }
 
-    List<int> cartOrderTimeToList() {
+    List<int> cartItemsPerOderToList() {
       return cartItemPerOder.entries.map((e) => e.value).toList();
     }
 
-    List<int> itemsPerOder = cartOrderTimeToList();
+    List<String> cartOrderTimeToList() {
+      return cartItemPerOder.entries.map((e) => e.key).toList();
+    }
+
+    List<int> itemsPerOder = cartItemsPerOderToList();
     var listCounter = 0;
     return Scaffold(
       appBar: AppBar(
@@ -51,10 +61,16 @@ class CartHistory extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    BigText(
-                      text: getHistoryCartList[i].time.toString(),
-                      size: 35.sp,
-                    ),
+                    //BigText(text: getHistoryCartList[i].time.toString(),size: 35.sp),
+                    (() {
+                      DateTime parseDate = DateFormat("yyyy-MM-dd HH:mm:ss")
+                          .parse(getHistoryCartList[listCounter].time!);
+                      var inputDate = DateTime.parse(parseDate.toString());
+                      var outputFormat = DateFormat("MM/dd/yyyy hh:mm a");
+                      var outputDate = outputFormat.format(inputDate);
+                      //return Text(getHistoryCartList[listCounter].time!);
+                      return BigText(text: outputDate);
+                    }()),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
@@ -96,16 +112,39 @@ class CartHistory extends StatelessWidget {
                               BigText(
                                 text: "${itemsPerOder[i]} items",
                               ),
-                              Container(
-                                padding: EdgeInsets.symmetric(
-                                    vertical: 2.h, horizontal: 10.w),
-                                decoration: BoxDecoration(
-                                    borderRadius: BorderRadius.circular(10.r),
-                                    border: Border.all(
-                                        width: 1, color: Colors.blue)),
-                                child: const SmallText(
-                                  text: 'one more',
-                                  color: Colors.black87,
+                              GestureDetector(
+                                onTap: () {
+                                  var orderTime = cartOrderTimeToList();
+                                  //print("Order time " + orderTime[i].toString());
+                                  Map<int, CartModel> moreOrder = {};
+                                  for (int j = 0;
+                                      j < getHistoryCartList.length;
+                                      j++) {
+                                    if (getHistoryCartList[j].time ==
+                                        orderTime[i]) {
+                                      moreOrder.putIfAbsent(
+                                          getHistoryCartList[j].id!,
+                                          () => CartModel.fromJson(jsonDecode(
+                                              jsonEncode(
+                                                  getHistoryCartList[j]))));
+                                    }
+                                  }
+                                  Get.find<CartController>().setItems =
+                                      moreOrder;
+                                  Get.find<CartController>().addToCartList();
+                                  Get.toNamed(RouteHelper.getCartPage());
+                                },
+                                child: Container(
+                                  padding: EdgeInsets.symmetric(
+                                      vertical: 2.h, horizontal: 10.w),
+                                  decoration: BoxDecoration(
+                                      borderRadius: BorderRadius.circular(10.r),
+                                      border: Border.all(
+                                          width: 1, color: Colors.blue)),
+                                  child: const SmallText(
+                                    text: 'one more',
+                                    color: Colors.black87,
+                                  ),
                                 ),
                               )
                             ],
