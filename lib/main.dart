@@ -4,14 +4,19 @@ import 'package:food_delivery/controllers/popular_product_controller.dart';
 import 'package:food_delivery/controllers/recommended_product_controller.dart';
 //import 'package:food_delivery/features/cart/presemtation/ui/cart.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
+import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:food_delivery/features/splash/splash_page.dart';
 import 'package:food_delivery/routes/route_helper.dart';
 import 'package:get/get.dart';
 import 'helper/dependencis.dart' as dep;
 
+import 'package:firebase_core/firebase_core.dart';
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dep.init();
+  // WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
   runApp(const MyApp());
 }
 
@@ -36,8 +41,9 @@ class MyApp extends StatelessWidget {
               //   fontFamily: 'Mulish',
               // ),
               //home: SplashScreen(),
-              initialRoute: RouteHelper.getSplashPage(),
-              getPages: RouteHelper.routes,
+              home: SignInPage(),
+              // initialRoute: RouteHelper.getSplashPage(),
+              // getPages: RouteHelper.routes,
             );
           });
         });

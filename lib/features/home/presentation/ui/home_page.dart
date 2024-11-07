@@ -1,7 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:food_delivery/controllers/auth_controller.dart';
 import 'package:food_delivery/features/home/presentation/ui/main_food_page.dart';
 import 'package:flutter/src/material/bottom_navigation_bar.dart';
+import 'package:food_delivery/features/pages/edit_profile.dart';
+import 'package:food_delivery/features/pages/profile_page.dart';
+// import 'package:food_delivery/features/pages/profile_page.dart';
+import 'package:food_delivery/features/pages/sign_up_page.dart';
 import 'package:persistent_bottom_nav_bar/persistent_bottom_nav_bar.dart';
 
 class HomePage extends StatefulWidget {
@@ -19,7 +24,10 @@ class _HomePageState extends State<HomePage> {
     MainFoodPage(),
     Container(child: Center(child: Text("Next page"))),
     Container(child: Center(child: Text("Next next page"))),
-    Container(child: Center(child: Text("Next next next page"))),
+    ProFilePage(),
+    // EditProfilePage(),
+    // SignUpPage(),
+    // ProfileFormPage(),
   ];
 
   void onTapNav(int index) {
@@ -39,7 +47,11 @@ class _HomePageState extends State<HomePage> {
       MainFoodPage(),
       Container(child: Center(child: Text("Next page"))),
       Container(child: Center(child: Text("Next next page"))),
-      Container(child: Center(child: Text("Next next next page"))),
+      // Container(child: Center(child: Text("Next next next page"))),
+      ProFilePage(),
+      // EditProfilePage(),
+      // SignUpPage(),
+      // ProfileFormPage(),
     ];
   }
 
