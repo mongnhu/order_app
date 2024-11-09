@@ -133,6 +133,11 @@ class CartController extends GetxController {
     return cartRepo.getHistoryCartList();
   }
 
+  void removeHistoryCart() {
+    cartRepo.removeHistoryCart();
+    update();
+  }
+
   set setItems(Map<int, CartModel> setItems) {
     _items = {};
     _items = setItems;

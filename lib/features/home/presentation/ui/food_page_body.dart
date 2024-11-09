@@ -47,7 +47,6 @@ class _FoodPageBodyState extends State<FoodPageBody> {
     return Column(
       children: [
         // Slider section
-
         GetBuilder<PopularProductController>(builder: (popularProducts) {
           return popularProducts.isLoaded
               ? SizedBox(
@@ -137,7 +136,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                             // Text section
                             Expanded(
                               child: Container(
-                                height: 85,
+                                height: 90,
                                 decoration: const BoxDecoration(
                                   borderRadius: BorderRadius.only(
                                       topRight: Radius.circular(10),
@@ -156,27 +155,27 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                                           text: recommendedProduct
                                               .recommendedProductList[index]
                                               .name!),
-                                      //  Row(
-                                      //   mainAxisAlignment:
-                                      //       MainAxisAlignment.spaceBetween,
-                                      //   children: [
-                                      //     IconAndText(
-                                      //       color: Colors.yellow,
-                                      //       text: 'Normal',
-                                      //       icon: Icons.circle_sharp,
-                                      //     ),
-                                      //     IconAndText(
-                                      //       color: Colors.red,
-                                      //       text: '20km',
-                                      //       icon: Icons.location_on,
-                                      //     ),
-                                      //     IconAndText(
-                                      //       color: Colors.blue,
-                                      //       text: '30 phút',
-                                      //       icon: Icons.access_time,
-                                      //     ),
-                                      //   ],
-                                      // ),
+                                      Row(
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.spaceBetween,
+                                        children: [
+                                          IconAndText(
+                                            color: Colors.yellow,
+                                            text: 'Normal',
+                                            icon: Icons.circle_sharp,
+                                          ),
+                                          IconAndText(
+                                            color: Colors.red,
+                                            text: '20km',
+                                            icon: Icons.location_on,
+                                          ),
+                                          IconAndText(
+                                            color: Colors.blue,
+                                            text: '30 minutes',
+                                            icon: Icons.access_time,
+                                          ),
+                                        ],
+                                      ),
                                       Row(
                                         crossAxisAlignment:
                                             CrossAxisAlignment.end,
@@ -187,7 +186,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                                             margin:
                                                 EdgeInsets.only(bottom: 2.5.h),
                                             child: Text(
-                                              '25.000',
+                                              '21\$',
                                               style: TextStyle(
                                                 fontSize: 20.sp,
                                                 decoration:
@@ -198,7 +197,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                                           ),
                                           SizedBox(width: 5.w),
                                           Text(
-                                            '20.000',
+                                            '20\$',
                                             style: TextStyle(
                                               color: Colors.red,
                                               fontWeight: FontWeight.bold,
@@ -325,7 +324,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                             SizedBox(width: 15.w),
                             const SmallText(text: "26"),
                             SizedBox(width: 5.w),
-                            const SmallText(text: 'bình luận'),
+                            const SmallText(text: 'comments'),
                           ],
                         )
                       ],
@@ -346,7 +345,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                         ),
                         IconAndText(
                           color: Colors.blue,
-                          text: '30 phút',
+                          text: '30 minutes',
                           icon: Icons.access_time,
                         ),
                       ],

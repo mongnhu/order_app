@@ -21,16 +21,13 @@ class CartPage extends StatelessWidget {
         appBar: AppBar(
           leading: Container(
             margin: EdgeInsets.all(15.h),
-            child: MouseRegion(
-              cursor: SystemMouseCursors.click,
-              child: GestureDetector(
-                onTap: () {
-                  // Get.toNamed(RouteHelper.getPopularFood(, 1));
-                },
-                child: const AppIcon(
-                  icon: Icons.arrow_back_ios_new,
-                  iconColor: Colors.blueAccent,
-                ),
+            child: GestureDetector(
+              onTap: () {
+                Get.back();
+              },
+              child: const AppIcon(
+                icon: Icons.arrow_back_ios_new,
+                iconColor: Colors.blueAccent,
               ),
             ),
           ),
@@ -58,8 +55,8 @@ class CartPage extends StatelessWidget {
         ),
         body: Stack(
           children: [
-            GetBuilder<CartController>(builder: (_cartController) {
-              return _cartController.getItems.length > 0
+            GetBuilder<CartController>(builder: (cartController) {
+              return cartController.getItems.isNotEmpty
                   ? Container(
                       margin: EdgeInsets.only(left: 20.w, right: 20.w),
                       child:
@@ -228,7 +225,7 @@ class CartPage extends StatelessWidget {
                 ),
                 color: Colors.black12,
               ),
-              child: cartController.getItems.length > 0
+              child: cartController.getItems.isNotEmpty
                   ? Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
