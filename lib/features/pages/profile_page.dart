@@ -12,6 +12,7 @@ class ProFilePage extends StatefulWidget {
 }
 
 class _ProFilePageState extends State<ProFilePage> {
+  bool _isLoggedIn = true;
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for form fields
@@ -54,28 +55,15 @@ class _ProFilePageState extends State<ProFilePage> {
     }
   }
 
-  // Future<void> _saveProfile() async {
-  //   final user = _auth.currentUser;
-  //   if (user != null) {
-  //     await _firestore.collection('users').doc(user.uid).set({
-  //       'avatarUrl': avatarUrlController.text,
-  //       'name': nameController.text,
-  //       'phone': phoneController.text,
-  //       'address': addressController.text,
-  //       'notes': notesController.text,
-  //     }, SetOptions(merge: true));
-
-  //     ScaffoldMessenger.of(context).showSnackBar(
-  //       SnackBar(content: Text('Profile updated successfully!')),
-  //     );
-  //   }
-  // }
-
   Future<void> _logout() async {
     await _auth.signOut();
-    Navigator.pushReplacement(
+    setState(() {
+      _isLoggedIn = false;
+    });
+    Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => SignInPage()),
+      (route) => false,
     );
   }
 

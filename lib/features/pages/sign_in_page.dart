@@ -23,6 +23,7 @@ class _SignInPageState extends State<SignInPage> {
     );
 
     if (success) {
+      setState(() {});
       // Login successful
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(

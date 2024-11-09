@@ -50,7 +50,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
         GetBuilder<PopularProductController>(builder: (popularProducts) {
           return popularProducts.isLoaded
               ? SizedBox(
-                  height: Dimensions.pageView,
+                  height: 0.34.sh,
                   child: PageView.builder(
                       controller: pageController,
                       itemCount: popularProducts.popularProductList.length,
@@ -62,18 +62,6 @@ class _FoodPageBodyState extends State<FoodPageBody> {
               : const CircularProgressIndicator();
         }),
 
-        // SizedBox(
-        //   height: 0.32.sh,
-        //   child: PageView.builder(
-        //     controller: pageController,
-        //     itemCount: 5,
-        //     itemBuilder: (context, position) {
-        //       return _buildPageItem(position);
-        //     },
-        //   ),
-        // ),
-        // SizedBox(height: 15.h),
-
         // Dots Indicator section
         GetBuilder<PopularProductController>(builder: (populaeProducts) {
           return DotsIndicator(
@@ -83,10 +71,10 @@ class _FoodPageBodyState extends State<FoodPageBody> {
             position: _curPageValue.toInt(),
             decorator: DotsDecorator(
               activeColor: Theme.of(context).colorScheme.primary,
-              size: const Size.square(9.0),
-              activeSize: const Size(18.0, 9.0),
+              size: Size.square(15.r),
+              activeSize: Size(25.r, 15.r),
               activeShape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(Dimensions.radius5),
+                borderRadius: BorderRadius.circular(5.r),
               ),
             ),
           );
@@ -255,7 +243,6 @@ class _FoodPageBodyState extends State<FoodPageBody> {
         children: [
           GestureDetector(
             onTap: () {
-              //Get.to(() => PopularFoodDetail());
               Get.toNamed(RouteHelper.getPopularFood(index, "home"));
             },
             child: Container(
@@ -265,7 +252,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
                   color: index.isEven
                       ? Theme.of(context).colorScheme.primaryContainer
                       : Theme.of(context).colorScheme.tertiaryContainer,
-                  borderRadius: BorderRadius.circular(Dimensions.radius30),
+                  borderRadius: BorderRadius.circular(50.r),
                   image: DecorationImage(
                       fit: BoxFit.cover,
                       image: NetworkImage(AppConstants.BASE_URL +
@@ -279,7 +266,7 @@ class _FoodPageBodyState extends State<FoodPageBody> {
               height: 0.16.sh,
               margin: EdgeInsets.only(left: 30.w, right: 30.w, bottom: 10.h),
               decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(Dimensions.radius20),
+                  borderRadius: BorderRadius.circular(25.r),
                   color: Colors.white,
                   boxShadow: const [
                     BoxShadow(
