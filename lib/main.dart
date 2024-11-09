@@ -43,10 +43,10 @@ class MyApp extends StatelessWidget {
                 useMaterial3: true,
                 fontFamily: 'Mulish',
               ),
-              //home: SplashScreen(),
-              home: SignInPage(),
-              // initialRoute: RouteHelper.getSplashPage(),
-              // getPages: RouteHelper.routes,
+              // home: SplashScreen(),
+              // home: SignInPage(),
+              initialRoute: RouteHelper.getSplashPage(),
+              getPages: RouteHelper.routes,
             );
           });
         });

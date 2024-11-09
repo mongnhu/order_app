@@ -17,6 +17,7 @@ class CartHistory extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var cartController = Get.find<CartController>();
     var getHistoryCartList =
         Get.find<CartController>().getHistoryCartList().reversed.toList();
 
@@ -47,8 +48,26 @@ class CartHistory extends StatelessWidget {
         actions: [
           Container(
             margin: EdgeInsets.only(right: 20.w),
-            child: const AppIcon(icon: Icons.shopping_cart_outlined),
+            child: GestureDetector(
+              onTap: () {
+                cartController.removeHistoryCart();
+                Get.snackbar(
+                  "Delete History Cart",
+                  "HistoryCart deleted successfully!",
+                );
+              },
+              child: AppIcon(icon: Icons.delete),
+            ),
           ),
+          Container(
+            margin: EdgeInsets.only(right: 20.w),
+            child: GestureDetector(
+              onTap: () {
+                Get.toNamed(RouteHelper.getCartPage());
+              },
+              child: const AppIcon(icon: Icons.shopping_cart_outlined),
+            ),
+          )
         ],
       ),
       body: Container(
