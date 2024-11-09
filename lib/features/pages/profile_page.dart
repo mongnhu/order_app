@@ -3,6 +3,8 @@ import 'package:food_delivery/features/pages/edit_profile.dart';
 import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:get/get.dart';
+import 'package:food_delivery/controllers/auth_controller.dart';
 
 class ProFilePage extends StatefulWidget {
   const ProFilePage({super.key});
@@ -12,7 +14,6 @@ class ProFilePage extends StatefulWidget {
 }
 
 class _ProFilePageState extends State<ProFilePage> {
-  bool _isLoggedIn = true;
   final _formKey = GlobalKey<FormState>();
 
   // Controllers for form fields
@@ -57,9 +58,8 @@ class _ProFilePageState extends State<ProFilePage> {
 
   Future<void> _logout() async {
     await _auth.signOut();
-    setState(() {
-      _isLoggedIn = false;
-    });
+    Get.find<AuthController>().isLoggedIn.value = false;
+
     Navigator.pushAndRemoveUntil(
       context,
       MaterialPageRoute(builder: (context) => SignInPage()),
@@ -110,24 +110,39 @@ class _ProFilePageState extends State<ProFilePage> {
               ),
               TextFormField(
                 controller: nameController,
-                decoration: InputDecoration(labelText: 'Name'),
+                decoration: InputDecoration(
+                  labelText: 'Name',
+                  prefixIcon: Icon(Icons.person_2),
+                ),
               ),
               TextFormField(
                 controller: phoneController,
-                decoration: InputDecoration(labelText: 'Phone'),
+                decoration: InputDecoration(
+                  labelText: 'Phone',
+                  prefixIcon: Icon(Icons.phone),
+                ),
               ),
               TextFormField(
                 controller: emailController,
-                decoration: InputDecoration(labelText: 'Email'),
+                decoration: InputDecoration(
+                  labelText: 'Email',
+                  prefixIcon: Icon(Icons.email),
+                ),
                 readOnly: true, // Email is typically not editable
               ),
               TextFormField(
                 controller: addressController,
-                decoration: InputDecoration(labelText: 'Address'),
+                decoration: InputDecoration(
+                  labelText: 'Address',
+                  prefixIcon: Icon(Icons.add_location_alt_rounded),
+                ),
               ),
               TextFormField(
                 controller: notesController,
-                decoration: InputDecoration(labelText: 'Notes'),
+                decoration: InputDecoration(
+                  labelText: 'Notes',
+                  prefixIcon: Icon(Icons.note),
+                ),
               ),
               SizedBox(height: 20),
               // ElevatedButton(

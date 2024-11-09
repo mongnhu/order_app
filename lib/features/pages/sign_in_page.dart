@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/pages/sign_up_page.dart';
 import 'package:food_delivery/firebase/auth_service.dart';
+import 'package:get/get.dart';
+import 'package:food_delivery/controllers/auth_controller.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -23,7 +25,8 @@ class _SignInPageState extends State<SignInPage> {
     );
 
     if (success) {
-      setState(() {});
+      Get.find<AuthController>().isLoggedIn.value = true;
+
       // Login successful
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
