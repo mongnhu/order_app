@@ -56,4 +56,5 @@ class AuthService {
       throw Exception('Registration failed: $e');
     }
   }
+
 }

@@ -14,6 +14,8 @@ import 'helper/dependencis.dart' as dep;
 import 'package:firebase_core/firebase_core.dart';
 
 // import 'package:firebase_core/firebase_core.dart';
+// var cloudinary = Cloudinary.fromStringUrl(
+//     'cloudinary://978721145967327:ZwD21p--UxkqNkYD_fitu7hi64U@dpejj910e');
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();

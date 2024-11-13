@@ -29,6 +29,16 @@ dependencies:
    pdf: ^3.11.1
    printing: ^5.13.4
 
+   flutter_image_compress: ^2.3.0 
+
+   cloudinary_api: ^1.0.0
+
+   firebase_storage: ^12.3.5
+   image_picker: ^1.1.2
+   file_picker: ^5.2.7
+   path_provider: ^2.1.5
+   permission_handler: ^10.2.0
+
 dev_dependencies:
    flutter_test:
       sdk: flutter
