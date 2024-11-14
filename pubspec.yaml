@@ -28,6 +28,7 @@ dependencies:
    cupertino_icons: ^1.0.6
    pdf: ^3.11.1
    printing: ^5.13.4
+   flutter_paypal_checkout: ^1.0.1
 
 dev_dependencies:
    flutter_test:
