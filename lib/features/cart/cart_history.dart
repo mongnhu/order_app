@@ -50,6 +50,15 @@ class CartHistory extends StatelessWidget {
             margin: EdgeInsets.only(right: 20.w),
             child: GestureDetector(
               onTap: () {
+                Get.toNamed(RouteHelper.getStatisticsPage());
+              },
+              child: const AppIcon(icon: Icons.bar_chart),
+            ),
+          ),
+          Container(
+            margin: EdgeInsets.only(right: 20.w),
+            child: GestureDetector(
+              onTap: () {
                 cartController.removeHistoryCart();
                 Get.snackbar(
                   "Delete History Cart",
