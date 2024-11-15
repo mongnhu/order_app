@@ -5,6 +5,7 @@ import 'package:food_delivery/features/food/presentation/ui/recommend_food_detai
 import 'package:food_delivery/features/home/presentation/ui/home_page.dart';
 import 'package:food_delivery/features/pages/sign_in_page.dart';
 import 'package:food_delivery/features/splash/splash_page.dart';
+import 'package:food_delivery/features/statistics/statistics_page.dart';
 import 'package:get/get.dart';
 
 class RouteHelper {
@@ -15,6 +16,7 @@ class RouteHelper {
   static const String cartPage = "/cart-page";
   static const String checkoutPage = "/checkout-page";
   static const String signInPage = "/sign-in-page";
+  static const String statisticsPage = "/statistics-page";
 
   static String getSplashPage() => splashPage;
   static String getInitial() => initial;
@@ -25,6 +27,7 @@ class RouteHelper {
   static String getCartPage() => cartPage;
   static String getCheckoutPage() => checkoutPage;
   static String getSignInPage() => signInPage;
+  static String getStatisticsPage() => statisticsPage;
 
   static List<GetPage> routes = [
     GetPage(name: splashPage, page: () => const SplashScreen()),
@@ -62,6 +65,12 @@ class RouteHelper {
         name: checkoutPage,
         page: () {
           return CheckoutPage();
+        },
+        transition: Transition.fadeIn),
+    GetPage(
+        name: statisticsPage, // Định nghĩa route cho StatisticsPage
+        page: () {
+          return StatisticsPage();
         },
         transition: Transition.fadeIn),
   ];

@@ -147,4 +147,24 @@ class CartController extends GetxController {
     cartRepo.addToCartList(getItems);
     update();
   }
+
+  Map<String, Map<String, dynamic>> getSoldItemsSummary() {
+    Map<String, Map<String, dynamic>> soldItemsSummary = {};
+
+    for (var cartItem in getHistoryCartList()) {
+      if (soldItemsSummary.containsKey(cartItem.name)) {
+        soldItemsSummary.update(cartItem.name!, (value) {
+          value['quantity'] += cartItem.quantity!;
+          return value;
+        });
+      } else {
+        soldItemsSummary[cartItem.name!] = {
+          'quantity': cartItem.quantity!,
+          'image': cartItem.img, // Lấy URL hình ảnh từ CartModel
+        };
+      }
+    }
+
+    return soldItemsSummary;
+  }
 }
